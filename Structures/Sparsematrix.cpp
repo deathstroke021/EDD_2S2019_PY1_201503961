@@ -1,33 +1,21 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <iomanip>
 using namespace std;
 
-// Validaciones
-bool occurenceMatch(string str, int noOccurence){ // to find number of occurences of comma (USED FOR ENTRY VALIDATION)
-	int counter = 0;
-	int number = 0;
-	while (counter < str.length()){
-		if (str[counter] == ','){
-			number++;
-		}
-		counter++;
-	}
-	if (number == noOccurence){
-		return true;
-	}
-	return false;
-}
+ofstream file;
 
 class ColumnNode{ //Clase nodo columna
 	friend class RowNode;
 	friend class SM;
 private:
 	ColumnNode *nextCol; // pointer to next column
-	int colNo, value; // column number and value
-	ColumnNode(int colNo, int val); // constructor to set value and column number
+	int colNo; // column number and value
+	string value;
+	ColumnNode(int colNo, string val); // constructor to set value and column number
 };
-ColumnNode::ColumnNode(int colNo, int val){
+ColumnNode::ColumnNode(int colNo, string val){ //Valor nodo en la columna
 	value = val;
 	this->colNo = colNo;
 	nextCol = NULL;
@@ -42,11 +30,12 @@ private:
 	RowNode(int rowNo);
 	~RowNode();
 	void deleteFirstCol(); //deletes the first column node and assigns the next to head
-	void overwriteColumn(ColumnNode *curr, int val); // if a column node exists prompts to overwrite the value
-	void insertColumn(int colIndex, int val); //inserting column inside a row node
+	void overwriteColumn(ColumnNode *curr, string val); // if a column node exists prompts to overwrite the value
+	void insertColumn(int colIndex, string val); //inserting column inside a row node
 	void printCol(int mSize); // printing column nodes inside a row node
+	void graphvizCol(int mSize, int n);
 };
-RowNode::RowNode(int rowNo){
+RowNode::RowNode(int rowNo){ //Valor fila
 	this->rowNo = rowNo;
 	nextRow = NULL;
 	colHead = NULL;
@@ -65,7 +54,7 @@ void RowNode::deleteFirstCol(){ //Eliminar primera columna
 		colTail = NULL;
 	}
 }
-void RowNode::overwriteColumn(ColumnNode *curr, int val){ //Sobreescribir columna
+void RowNode::overwriteColumn(ColumnNode *curr, string val){ //Sobreescribir columna
 	cout << "A value already exists in row no. " << rowNo << " and col no. " << curr->colNo << endl << "Would you like to overwrite? (Y/N) ";
 	char oW;
 	cin >> oW;
@@ -77,7 +66,7 @@ void RowNode::overwriteColumn(ColumnNode *curr, int val){ //Sobreescribir column
 		cout << "Value has not been overwritten." << endl;
 	}
 }
-void RowNode::insertColumn(int colIndex, int val){ //Insertar columna
+void RowNode::insertColumn(int colIndex, string val){ //Insertar columna
 	if (colHead == NULL || (colTail != NULL && colIndex > colTail->colNo)){ //if the list is empty or column number is greater than the last column number in the current list
 		ColumnNode *newNode = new ColumnNode(colIndex, val);
 		if (colHead == NULL){ //if the list is empty
@@ -147,15 +136,63 @@ void RowNode::printCol(int mSize){ //Imprimir columna
 		counter++;
 	}
 }
+
+void RowNode::graphvizCol(int mSize, int n){ //Imprimir columna
+	int counter = 0;
+	int counter2 = 0;
+	ColumnNode *curr = colHead;
+
+	//file.open("archivo.txt");
+
+
+	while (counter < mSize){
+
+		/*
+		iterates using a counter which will indicate the column size
+		if the counter matches the column number then it prints the value and points to the next column
+		otherwise it does not exist, so it prints a zero
+		if the current column is null and the counter is still less than column size
+		then it will have to print zero's for the rest of the iterations
+		*/
+		if (curr != NULL){
+			if (counter == curr->colNo){
+				//cout << right << setw(5) << curr->value;
+				//file << "primera línea\n";
+				//file << right << setw(5) << curr->value;
+				file << "N"<< counter2 <<"_L"<< n << " [label = \""<< curr->value <<"\" width = 1.5, group ="<< counter + 2 <<"];"<<"\n";
+				//file << curr->value <<" "<<counter<<"\n";
+
+
+
+
+				curr = curr->nextCol;
+				counter2++;
+			}
+			else{
+				//cout << setw(5) << right << "0";
+			}
+		}
+		else{
+			//cout << setw(5) << right << "0";
+		}
+		counter++;
+
+	}
+	file<<"U"<<n<<" -> N0" <<"_L"<< n <<"\n";
+	//file.close();
+
+}
+
 class SM{ //Clase Sparse Matrix
 private:
 	int n, m; // max number of rows and columns
 	int rowSize; // actual size of the row list
 	RowNode *rowHead; //pointer to the first row in the list
 	RowNode *rowTail; //pointer to the last row in the list
-	void insertEntry(int rowIndex, int colIndex, int val); // inserting a new element into a row x column
+	void insertEntry(int rowIndex, int colIndex, string val); // inserting a new element into a row x column
 	void deleteFirstRow();  // deletes the first row node in the list and assigns the next to head
 	void printColumnHeader();// will print out the column numbers ( ex 1 2 3 4 5 6 7 8 9 10)
+	void graphvizColumnHeader();
 	void printEmptyRow(int counter); // will print out an empty row for the counter number (ex 5| 0 0 0 0 0 0)
 
 public:
@@ -163,9 +200,10 @@ public:
 	~SM();
 	void readElements();
 	void printMatrix();
+	void graphvizMatrix();
 	//SM * addSM(SM &other);
 };
-void SM::insertEntry(int rowIndex, int colIndex, int val){ //Insertar nodo
+void SM::insertEntry(int rowIndex, int colIndex, string val){ //Insertar nodo
 	if (rowTail == NULL || rowIndex > rowTail->rowNo){ //insert at end if the list is empty or the row number is greater than the last row number
 		RowNode *newNode = new RowNode(rowIndex);
 		if (rowHead == NULL){ // if the list is empty
@@ -234,6 +272,38 @@ void SM::printColumnHeader(){ //Imprimir headers
 	}
 	cout << endl;
 }
+
+void SM::graphvizColumnHeader(){ //Imprimir headers
+
+
+	for (int i = 0; i < m; i++){
+		//cout << right << setw(5) << i;
+		file <<"A"<<i<< "[label =\"C"<<i<<"\" width = 1.5 style = filled, group ="<<2+i<<"];"<<"\n";
+		if (i != m-1){
+		file<<"A"<< i <<"->" <<"A"<< i + 1 <<"\n";
+	  }
+		if (i > 0){
+		file<<"A"<< i <<"->" <<"A"<< i - 1 <<"\n";
+	  }
+
+
+
+		//file << i << "\n";
+	}
+	//cout << endl;
+	file <<"{ rank = same; Mt; ";
+
+	for (int i = 0; i < m; i++){
+		//cout << right << setw(5) << i;
+		file <<"A"<<i<<"; ";
+
+
+		//file << i << "\n";
+	}
+	file <<"}"<<"\n";
+
+}
+
 void SM::printEmptyRow(int counter){ //Imprimir filas vacias
 	for (int i = 0; i < m; i++){
 		cout << setw(5) << right << "0";
@@ -257,179 +327,91 @@ SM::~SM(){ // Destruyecdo la matriz
 }
 void SM::readElements(){ //Ingresando elementos matriz
 		{
-			int rowIndex,colIndex,val;
+			ifstream ip("f.csv");
 
-			try{
-				rowIndex = 0;
-				colIndex = 0;
-				val = 1;
+		  if(!ip.is_open()) std::cout << "ERROR: File Open" << '\n';
 
-				if (colIndex < 0 || colIndex >= m || rowIndex < 0 || rowIndex >= n){
-					cout << "Out of bound. Maximum Column number entry is " << m - 1 << " and Maximum Row number entry is " << n - 1 << endl;
-				}
-				else if (val == 0){
-					cout << "Value must be non-zero!" << endl;
-				}
-				else
-					insertEntry(rowIndex, colIndex, val);
+		  string dato;
+		  /*string lastname;
+		  string age;
+		  string weight;
+		  string a;*/
+		  int count = 0;
+		  int count2 = 0;
 
-			}
-			catch (exception e){
-				cout << "Invalid input, please try again" << endl;
-			}
+		  while(ip.good()){
+
+		    getline(ip,dato,'\n');
+		    std::string s = dato;
+		    //std::cout << "cadena: "<<s<< '\n';
+		    std::string delimiter = ";";
+
+		    size_t pos = 0;
+		    std::string token;
+		    //count2 = 0;
+		    while ((pos = s.find(delimiter)) != std::string::npos) {
+		        token = s.substr(0, pos);
+		        //std::cout << token << std::endl;
+		        //std::cout << count2 << std::endl;
+		        count2 = count2 +1;
+		        s.erase(0, pos + delimiter.length());
+		    }
+		    count2 = count2 + 1;
+		    //std::cout << s << std::endl;
+
+		    count = count + 1;
+
+		  }
+
+		  //std::cout << "Filas: "<<count - 1<< '\n';
+		  int count3 = count2/(count - 1);
+		  //std::cout << "Columnas: "<<count3<< '\n';
+
+			//SM *s = new SM(count - 1, count3); // Creando sparse matrix 1
+
+		  ip.close();
+
+		  ifstream ip2("f.csv");
+
+		  if(!ip2.is_open()) std::cout << "ERROR: File Open" << '\n';
+
+		  string dato2;
+
+		  int row = 0;
+
+
+		  while(ip2.good() && row < count - 1){
+
+		    int column = 0;
+		    while(column < count3 - 1){
+		      getline(ip2,dato2,';');
+					if(dato2 != "x"){
+						insertEntry(row, column, dato2);
+					}
+
+		      //std::cout << "Dato: "<<dato2<< '\n';
+		      //std::cout << "Column: "<<column<< '\n';
+		      column = column + 1;
+
+		    }
+		    getline(ip2,dato2,'\n');
+				if(dato2 != "x"){
+				insertEntry(row, column, dato2);
+		   	}
+		    //std::cout << "Dato: "<<dato2<< '\n';
+		    //std::cout << "Column: "<< "4"<< '\n';
+		    //std::cout << "Row: "<<row << '\n';
+		    //std::cout << "-------------------" << '\n';
+		    row = row + 1;
+
+		  }
+		  ip2.close();
+
 		}
 }
-/*
-void SM::readElements(){ //Ingresando elementos matriz
-		{
-			string input = "";
-			cout << "Please input your desired elements into the sparse matrix \n";
-			cout << "Use the format row index,column index,value (EXAMPLE 0,1,1)" << endl;
-			cout << "Type EXIT to stop inputting" << endl;
-			while (1){
-				int rowIndex, colIndex, val;
-				cout << "Input: ";
-				cin >> input;
-				string toLower;
-				for (int i = 0; i < input.length(); i++){
-					toLower += tolower(input[i]);
-				}
-				if (toLower == "exit"){
-					break;
-				}
-				else{
-					try{
-						if (!(occurenceMatch(input, 2))){
-							throw exception();
-						}
-						rowIndex = stoi(input.substr(0, input.find_first_of(',')));
-						colIndex = stoi(input.substr(input.find_first_of(',') + 1, input.find_last_of(',')));
-						val = stoi(input.substr(input.find_last_of(',') + 1, input.length()));
-						if (colIndex < 0 || colIndex >= m || rowIndex < 0 || rowIndex >= n){
-							cout << "Out of bound. Maximum Column number entry is " << m - 1 << " and Maximum Row number entry is " << n - 1 << endl;
-						}
-						else if (val == 0){
-							cout << "Value must be non-zero!" << endl;
-						}
-						else
-							insertEntry(rowIndex, colIndex, val);
 
-					}
-					catch (exception e){
-						cout << "Invalid input, please try again" << endl;
-					}
-				}
-			}
-		}
-}
-
-SM * SM::addSM(SM &other){ //Operaciones
-		{
-			if ((other.m == this->m) && (other.n == this->n)){ // check if dimensions of 2 matrices are equal
-				SM * newSM = new SM(this->n, this->m); // create a new sparse matrix
-				RowNode * thisCurrRow = this->rowHead;  // pointer to first row node in this SM
-				RowNode * otherCurrRow = other.rowHead; // pointer to first row node in other SM
-				ColumnNode *otherCurrCol = NULL; // pointer to a column node in other SM (to be used later)
-				ColumnNode *thisCurrCol = NULL; // pointer to a column node in this SM (to be used later)
-				while (thisCurrRow != NULL || otherCurrRow != NULL){
-
-					There are 3 scenarios for EACH SM that need to be dealt with
-					1. This SM row pointer is NULL, so insert all the other SM's row nodes and column nodes (same needs to be replicated for other SM)
-					2. This SM row  pointer's number matches other SM row number, so there are several scenarios to be dealth with
-					2.1. Both column number's match, so insert new entry with the sum of those two numbers
-					2.2. This SM column number is less than the other's then insert this column number (same replicated for other SM)
-					2.3. This SM's column pointer is null, so insert all of other's column node(meaning that it might have reached the end of column list for this SM, but otherSM still has column nodes)
-					3. This SM row pointer's number is less than the other SM row number, so insert all the rows until it is no longer less than other SM row number and it is not NULL (hasn't reached end of list)
-					IMPORTANT: EACH OF THESE HAS BEEN REPLICIATED FOR BOTH THIS SM AND OTHER SM, SINCE THEY BOTH HAVE SAME SCENARIOS WHICH NEED TO BE TAKEN CARE OF
-
-					if (thisCurrRow == NULL && otherCurrRow != NULL){
-						while (otherCurrRow != NULL){
-							otherCurrCol = otherCurrRow->colHead;
-							while (otherCurrCol != NULL){
-								newSM->insertEntry(otherCurrRow->rowNo, otherCurrCol->colNo, otherCurrCol->value);
-								otherCurrCol = otherCurrCol->nextCol;
-							}
-							otherCurrRow = otherCurrRow->nextRow;
-						}
-						break;
-					}
-					else if (thisCurrRow != NULL && otherCurrRow == NULL){
-						while (thisCurrRow != NULL){
-							thisCurrCol = thisCurrRow->colHead;
-							while (thisCurrCol != NULL){
-								newSM->insertEntry(thisCurrRow->rowNo, thisCurrCol->colNo, thisCurrCol->value);
-								thisCurrCol = thisCurrCol->nextCol;
-							}
-							thisCurrRow = thisCurrRow->nextRow;
-						}
-					}
-					else if (thisCurrRow->rowNo == otherCurrRow->rowNo){
-						thisCurrCol = thisCurrRow->colHead;
-						otherCurrCol = otherCurrRow->colHead;
-						while (thisCurrCol != NULL || otherCurrCol != NULL){
-							if (otherCurrCol == NULL){
-								while (thisCurrCol != NULL){
-									newSM->insertEntry(thisCurrRow->rowNo, thisCurrCol->colNo, thisCurrCol->value);
-									thisCurrCol = thisCurrCol->nextCol;
-								}
-							}
-							else if (thisCurrCol == NULL){
-								while (otherCurrCol != NULL){
-									newSM->insertEntry(otherCurrRow->rowNo, otherCurrCol->colNo, otherCurrCol->value);
-									otherCurrCol = otherCurrCol->nextCol;
-								}
-							}
-							else if (thisCurrCol->colNo == otherCurrCol->colNo){
-								int sum = thisCurrCol->value + otherCurrCol->value;
-								newSM->insertEntry(thisCurrRow->rowNo, thisCurrCol->colNo, sum);
-								thisCurrCol = thisCurrCol->nextCol;
-								otherCurrCol = otherCurrCol->nextCol;
-							}
-							else if (thisCurrCol->colNo < otherCurrCol->colNo){
-								newSM->insertEntry(thisCurrRow->rowNo, thisCurrCol->colNo, thisCurrCol->value);
-								thisCurrCol = thisCurrCol->nextCol;
-							}
-
-							else if (otherCurrCol->colNo < thisCurrCol->colNo){
-								newSM->insertEntry(otherCurrRow->rowNo, otherCurrCol->colNo, otherCurrCol->value);
-								otherCurrCol = otherCurrCol->nextCol;
-							}
-						}
-						thisCurrRow = thisCurrRow->nextRow;
-						otherCurrRow = otherCurrRow->nextRow;
-
-					}
-					else if (thisCurrRow->rowNo < otherCurrRow->rowNo){
-						while (thisCurrRow != NULL && thisCurrRow->rowNo < otherCurrRow->rowNo){
-							thisCurrCol = thisCurrRow->colHead;
-							while (thisCurrCol != NULL){
-								newSM->insertEntry(thisCurrRow->rowNo, thisCurrCol->colNo, thisCurrCol->value);
-								thisCurrCol = thisCurrCol->nextCol;
-							}
-							thisCurrRow = thisCurrRow->nextRow;
-						}
-					}
-					else if (otherCurrRow->rowNo < thisCurrRow->rowNo){
-						while (otherCurrRow != NULL && otherCurrRow->rowNo < thisCurrRow->rowNo){
-							otherCurrCol = otherCurrRow->colHead;
-							while (otherCurrCol != NULL){
-								newSM->insertEntry(otherCurrRow->rowNo, otherCurrCol->colNo, otherCurrCol->value);
-								otherCurrCol = otherCurrCol->nextCol;
-							}
-							otherCurrRow = otherCurrRow->nextRow;
-						}
-					}
-
-				}
-				return newSM;
-			}
-			else
-				cout << "The sparse matrices dimensions are not the same. Aborting...";
-			system("pause");
-			abort();
-		}
-}*/
 void SM::printMatrix(){ //Imprimir matrix
+
 	printColumnHeader();
 	int counter = 0;
 	RowNode * curr = rowHead;
@@ -448,7 +430,7 @@ void SM::printMatrix(){ //Imprimir matrix
 				curr = curr->nextRow;
 				cout << endl;
 			}
-			else
+			else // No sirve de nada
 				printEmptyRow(counter);
 		}
 		else
@@ -457,37 +439,117 @@ void SM::printMatrix(){ //Imprimir matrix
 	}
 	cout << endl << "-----------------------------------------------------------" << endl;
 }
+
+void SM::graphvizMatrix(){ //Crear graphviz matrix
+
+	//ofstream file;
+	file.open("Matrix.dot");
+  file << "digraph Sparce_Matrix {\n";
+  file << "node [shape=box]\n";
+  file << "Mt[ label = \"Matrix\", width = 1.5, style = filled, group = 1 ];\n";
+	file << "e0[ shape = point, width = 0 ];\n";
+	file << "e1[ shape = point, width = 0 ];\n";
+
+	//dot Matrix.dot -Tpng -o Matrix.png
+
+	graphvizColumnHeader(); //Columnheaders de la matrix
+	int counter = 0;
+	RowNode * curr = rowHead;
+	while (counter < n){
+		/*
+		while loop with a counter to iterate through the maximum number of rows
+		if the counter matches the current row number then it prints the columns inside that row and points to next
+		otherwise it prints out empty
+		if the current row is null and the counter hasn't reached the end
+		then it will print zeros for the rest of the iterations
+		*/
+		//cout << setw(3) << counter << "|"; Rowheaders de la matrix
+		file<<"U"<< counter  <<"[label = \""<<"R"<< counter <<"\"    width = 1.5 style = filled, group = 1 ];"<<"\n";
+		//file<<"U"<< counter <<"->" <<"U"<< counter + 1 <<"\n";
+
+		if (counter != n-1){
+		file<<"U"<< counter <<"->" <<"U"<< counter + 1 <<"\n";
+	  }
+		if (counter > 0){
+		file<<"U"<< counter <<"->" <<"U"<< counter - 1 <<"\n";
+	  }
+
+		//file<<"U"<< counter + 1<<"->" <<"U"<< counter;
+		//file << counter <<"\n";
+		if (curr != NULL){
+			if (counter == curr->rowNo){
+				curr->graphvizCol(m,counter);
+				curr = curr->nextRow;
+				cout << endl;
+			}
+			else // No sirve de nada
+				printEmptyRow(counter);
+		}
+		else
+			printEmptyRow(counter);
+		counter++;
+	}
+	file <<"Mt->U0" <<"\n";
+	file <<"Mt->A0" <<"\n";
+
+
+	file << "}\n";
+	file.close();
+}
+
 int main(){ //Main
-	int r1, c1;
-	string in;
-	cout << "Please enter the sparse matrix 1 dimensions in the form row,column" << endl
-		 << "For example 5,10 for 5 rows and 10 columns" << endl;
-	cout << "Input: ";
-	cin >> in;
-	try{
-		if (!occurenceMatch(in, 1)){ // Validacion valores de entrada
-			cout << "Invalid input" << endl;
-			system("pause");
-			return 0;
+
+	ifstream ip("f.csv");
+
+	if(!ip.is_open()) std::cout << "ERROR: File Open" << '\n';
+
+	string dato;
+	/*string lastname;
+	string age;
+	string weight;
+	string a;*/
+	int count = 0;
+	int count2 = 0;
+
+	while(ip.good()){
+
+		getline(ip,dato,'\n');
+		std::string s = dato;
+		//std::cout << "cadena: "<<s<< '\n';
+		std::string delimiter = ";";
+
+		size_t pos = 0;
+		std::string token;
+		//count2 = 0;
+		while ((pos = s.find(delimiter)) != std::string::npos) {
+				token = s.substr(0, pos);
+				//std::cout << token << std::endl;
+				//std::cout << count2 << std::endl;
+				count2 = count2 +1;
+				s.erase(0, pos + delimiter.length());
 		}
-		r1 = stoi(in.substr(0, in.find_first_of(','))); // Numero filas matriz
-		c1 = stoi(in.substr(in.find_first_of(',') + 1, in.length())); // Numero columnas matriz
-		if (!(r1 > 0 && c1 > 0)){
-			cout << "ABORTING: Row and Column dimensions must both be greater than 0!" << endl;
-			abort();
-		}
-		SM *s = new SM(r1, c1); // Creando sparse matrix 1
+		count2 = count2 + 1;
+		//std::cout << s << std::endl;
+
+		count = count + 1;
+
+	}
+
+	//std::cout << "Filas: "<<count - 1<< '\n';
+	int count3 = count2/(count - 1);
+	//std::cout << "Columnas: "<<count3<< '\n';
+
+	SM *s = new SM(count - 1, count3); // Creando sparse matrix 1
+
+	ip.close();
+
+
 		s->readElements();
 		s->printMatrix();
-		//system("pause");
-		//system("cls");
-		//cout << "Sparse Matrix 1." << endl;
-		//s->printMatrix();
+		s->graphvizMatrix();
+
 		delete s;
-	}
-	catch (exception ex){
-		cout << "Invalid input, aborting." << endl;
-	}
+
 	system("pause");
 	return 0;
 }
