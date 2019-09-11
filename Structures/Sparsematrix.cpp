@@ -1,10 +1,109 @@
 #include <iostream>
+#include <stdlib.h>
 #include <fstream>
 #include <string>
 #include <iomanip>
 using namespace std;
 
 ofstream file;
+
+//int counter3= 0;
+
+struct nodo{
+       int nro;        // en este caso es un numero entero
+       struct nodo *sgte;
+};
+
+typedef struct nodo *Tlista;
+
+Tlista lista = NULL;
+
+
+void insertarFinal(Tlista &lista, int valor)
+{
+    Tlista t, q = new(struct nodo);
+
+    q->nro  = valor;
+    q->sgte = NULL;
+
+    if(lista==NULL)
+    {
+        lista = q;
+    }
+    else
+    {
+        t = lista;
+        while(t->sgte!=NULL)
+        {
+            t = t->sgte;
+        }
+        t->sgte = q;
+    }
+
+}
+
+
+bool buscarElemento(Tlista lista, int valor)
+{
+    Tlista q = lista;
+    int i = 1, band = 0;
+
+    while(q!=NULL)
+    {
+        if(q->nro==valor)
+        {
+            /*cout<<endl<<" Encontrada en posicion "<< i <<endl;
+            band = 1;*/
+						return true;
+        }
+        q = q->sgte;
+        i++;
+    }
+
+    if(band==0)
+        //cout<<"\n\n Numero no encontrado..!"<< endl;
+				return false;
+}
+
+void reportarLista(Tlista lista)
+{
+     int i = 0;
+
+     while(lista != NULL)
+     {
+          cout <<' '<< i+1 <<") " << lista->nro << endl;
+          lista = lista->sgte;
+          i++;
+     }
+}
+
+
+void eliminarElemento(Tlista &lista, int valor)
+{
+    Tlista p, ant;
+    p = lista;
+
+    if(lista!=NULL)
+    {
+        while(p!=NULL)
+        {
+            if(p->nro==valor)
+            {
+                if(p==lista)
+                    lista = lista->sgte;
+                else
+                    ant->sgte = p->sgte;
+
+                delete(p);
+                return;
+            }
+            ant = p;
+            p = p->sgte;
+        }
+    }
+    else
+        cout<<" Lista vacia..!";
+}
 
 class ColumnNode{ //Clase nodo columna
 	friend class RowNode;
@@ -33,7 +132,8 @@ private:
 	void overwriteColumn(ColumnNode *curr, string val); // if a column node exists prompts to overwrite the value
 	void insertColumn(int colIndex, string val); //inserting column inside a row node
 	void printCol(int mSize); // printing column nodes inside a row node
-	void graphvizCol(int mSize, int n);
+	void graphvizCol(int mSize, int n, int nSize);
+	void graphvizCol2(int mSize, int n);
 };
 RowNode::RowNode(int rowNo){ //Valor fila
 	this->rowNo = rowNo;
@@ -137,13 +237,193 @@ void RowNode::printCol(int mSize){ //Imprimir columna
 	}
 }
 
-void RowNode::graphvizCol(int mSize, int n){ //Imprimir columna
+void RowNode::graphvizCol(int mSize, int n, int nSize){ //Imprimir columna
 	int counter = 0;
 	int counter2 = 0;
 	ColumnNode *curr = colHead;
 
 	//file.open("archivo.txt");
 
+	while (counter < mSize){
+    //cout <<mSize<<"\n";
+
+		/*
+		iterates using a counter which will indicate the column size
+		if the counter matches the column number then it prints the value and points to the next column
+		otherwise it does not exist, so it prints a zero
+		if the current column is null and the counter is still less than column size
+		then it will have to print zero's for the rest of the iterations
+		*/
+		if (curr != NULL){
+			if (counter == curr->colNo){
+
+				//Nodos
+
+
+
+				file << "N"<< counter <<"_L"<< n << " [label = \""<< curr->value <<"\" width = 1.5, group ="<< counter + 2 <<"];"<<"\n";
+
+        if(counter2 == 0){
+          file<<"U"<<n<<" -> N"<< counter <<"_L"<< n << ";"<<"\n";
+        }
+
+        if(counter2 != 0){
+
+        int r = counter;
+        cout<<r<<"\n";
+
+        while(r > 0){
+          int c = r;
+          int ro = n + 1;
+          string rc;
+          rc =to_string(ro) + to_string(c);
+          cout<<rc<<"\n";
+          int _dato  = atoi(rc.c_str());
+
+          if(buscarElemento(lista, _dato) == true){
+            //cout<<"Encontrado"<< "\n";
+            cout<<"Nodo izquierda"<<"\n";
+          }
+
+          else if(buscarElemento(lista, _dato) == false){
+            //cout<<"Encontrado"<< "\n";
+            file<<"N"<<counter<<"_L"<<n<< " -> N" << r -1 << "_L"<< n << ";"<<"\n";
+            file<<"N"<<r - 1<<"_L"<<n<< " -> N" <<counter<< "_L"<< n << ";"<<"\n";
+            cout<<"Link Nodo previo"<<"\n";
+            r = 1;
+          }
+
+          r--;
+          cout<<r<<"\n";
+
+        }
+      }
+
+
+				// Horizontal Links
+        /*if (counter2 != 0){
+				file<<"N"<<counter2 -1 <<"_L"<<n<< " -> N" <<counter2 << "_L"<< n << ";"<<"\n";
+			}
+
+			  if (counter2 != 0){
+
+			  file<<"N"<<counter2 <<"_L"<<n<< " -> N" <<counter2 - 1<< "_L"<< n << ";"<<"\n";
+			}*/
+
+			//Vertical Links
+
+			 if (n == 0){
+				 file<<"A"<<counter << " -> N" << counter <<"_L0"<< ";"<<"\n";
+			 }
+
+			 //Prueba Inici
+
+			 else if (n != 0){
+
+				 int c = n;
+
+				 while(c > 0){
+					 int r = c;
+					 int co= counter +1;
+					 string rc;
+					 rc =to_string(r) + to_string(co);
+					 cout<<rc<<"\n";
+					 int _dato  = atoi(rc.c_str());
+
+					 if(buscarElemento(lista, _dato) == true && c == 1){
+						 //cout<<"Encontrado"<< "\n";
+						 file<<"A"<<counter << " -> N" << counter<<"_L"<<n<< ";"<<"\n";
+						 cout<<"Link con el header"<<"\n";
+					 }
+
+					 else if(buscarElemento(lista, _dato) == true && c != 1){
+						 //cout<<"Encontrado"<< "\n";
+						 cout<<"Nodo arriba"<<"\n";
+					 }
+
+					 else if(buscarElemento(lista, _dato) == false){
+						 //cout<<"Encontrado"<< "\n";
+						 file<<"N"<<counter <<"_L"<<n<< " -> N" << counter << "_L"<< c - 1<< ";"<<"\n";
+						 file<<"N"<<counter <<"_L"<<c-1<< " -> N" <<counter<< "_L"<< n << ";"<<"\n";
+						 cout<<"Link Nodo previo"<<"\n";
+						 c = 1;
+					 }
+
+
+					 //cout<<c<<"\n";
+					 c--;
+
+				 }
+
+
+			 }
+
+       if(n == nSize - 1){
+         file<<"e"<< n-2 <<"-> N"<<counter<<"_L"<<n<<"[dir = none, color = \"white\"];"<<"\n";
+       }
+
+			 //Prueba fin
+
+
+				curr = curr->nextCol;
+				counter2++;
+			}
+			else{
+				int r = n +1;
+				int c= counter + 1;
+				//std::string cadena = "";
+			  //cadena = std::to_string(entero);
+				string rc;
+				rc =to_string(r) + to_string(c);
+
+				int _dato  = atoi(rc.c_str());
+
+
+		    insertarFinal(lista, _dato );
+				//cout<<rc<<"\n";
+				//cout<<"Contador"<<counter3<<"\n";
+				//a[counter3] = rc;
+
+
+				//cout << setw(5) << right << "0";
+			}
+
+
+		}
+		else{
+			int r = n +1;
+			int c= counter + 1;
+			//std::string cadena = "";
+			//cadena = std::to_string(entero);
+			string rc;
+			rc =to_string(r) + to_string(c);
+
+			int _dato  = atoi(rc.c_str());
+
+
+			insertarFinal(lista, _dato );
+
+		}
+		counter++;
+
+	}
+
+	//file<<"U"<<n<<" -> N0" <<"_L"<< n <<"\n";
+
+  //cout<<nSize<<"\n";
+
+
+	//file.close();
+
+}
+
+void RowNode::graphvizCol2(int mSize, int n){ //Imprimir columna
+	int counter = 0;
+	int counter2 = 0;
+	ColumnNode *curr = colHead;
+
+	//file.open("archivo.txt");
+  file<<"{ rank = same; U"<< n <<";";
 
 	while (counter < mSize){
 
@@ -156,30 +436,27 @@ void RowNode::graphvizCol(int mSize, int n){ //Imprimir columna
 		*/
 		if (curr != NULL){
 			if (counter == curr->colNo){
-				//cout << right << setw(5) << curr->value;
-				//file << "primera línea\n";
-				//file << right << setw(5) << curr->value;
-				file << "N"<< counter2 <<"_L"<< n << " [label = \""<< curr->value <<"\" width = 1.5, group ="<< counter + 2 <<"];"<<"\n";
-				//file << curr->value <<" "<<counter<<"\n";
 
+				//Nodos
 
-
+				file << "N"<< counter <<"_L"<< n <<";";
 
 				curr = curr->nextCol;
 				counter2++;
 			}
 			else{
-				//cout << setw(5) << right << "0";
+
 			}
 		}
 		else{
-			//cout << setw(5) << right << "0";
+
+
 		}
 		counter++;
 
 	}
-	file<<"U"<<n<<" -> N0" <<"_L"<< n <<"\n";
-	//file.close();
+
+  file<<"}" <<"\n";
 
 }
 
@@ -280,13 +557,11 @@ void SM::graphvizColumnHeader(){ //Imprimir headers
 		//cout << right << setw(5) << i;
 		file <<"A"<<i<< "[label =\"C"<<i<<"\" width = 1.5 style = filled, group ="<<2+i<<"];"<<"\n";
 		if (i != m-1){
-		file<<"A"<< i <<"->" <<"A"<< i + 1 <<"\n";
+		file<<"A"<< i <<"->" <<"A"<< i + 1 <<";" <<"\n";
 	  }
 		if (i > 0){
-		file<<"A"<< i <<"->" <<"A"<< i - 1 <<"\n";
+		file<<"A"<< i <<"->" <<"A"<< i - 1 <<";" <<"\n";
 	  }
-
-
 
 		//file << i << "\n";
 	}
@@ -442,13 +717,23 @@ void SM::printMatrix(){ //Imprimir matrix
 
 void SM::graphvizMatrix(){ //Crear graphviz matrix
 
+
+
+
 	//ofstream file;
 	file.open("Matrix.dot");
   file << "digraph Sparce_Matrix {\n";
   file << "node [shape=box]\n";
   file << "Mt[ label = \"Matrix\", width = 1.5, style = filled, group = 1 ];\n";
-	file << "e0[ shape = point, width = 0 ];\n";
-	file << "e1[ shape = point, width = 0 ];\n";
+
+  int i;
+  for(i=1; i<=n-2; i++){
+  file << "e"<<i-1<<"[ shape = point, width = 0 ];\n";
+
+
+ }
+
+
 
 	//dot Matrix.dot -Tpng -o Matrix.png
 
@@ -468,33 +753,60 @@ void SM::graphvizMatrix(){ //Crear graphviz matrix
 		//file<<"U"<< counter <<"->" <<"U"<< counter + 1 <<"\n";
 
 		if (counter != n-1){
-		file<<"U"<< counter <<"->" <<"U"<< counter + 1 <<"\n";
+		file<<"U"<< counter <<"->" <<"U"<< counter + 1 <<";" <<"\n";
 	  }
 		if (counter > 0){
-		file<<"U"<< counter <<"->" <<"U"<< counter - 1 <<"\n";
+		file<<"U"<< counter <<"->" <<"U"<< counter - 1 <<";" <<"\n";
 	  }
+
 
 		//file<<"U"<< counter + 1<<"->" <<"U"<< counter;
 		//file << counter <<"\n";
 		if (curr != NULL){
 			if (counter == curr->rowNo){
-				curr->graphvizCol(m,counter);
+				curr->graphvizCol(m,counter,n);
+				curr->graphvizCol2(m,counter);
 				curr = curr->nextRow;
 				cout << endl;
 			}
-			else // No sirve de nada
-				printEmptyRow(counter);
+			else {// No sirve de nada
+
+      }
 		}
-		else
-			printEmptyRow(counter);
+		else{
+
+  }
+
 		counter++;
 	}
-	file <<"Mt->U0" <<"\n";
-	file <<"Mt->A0" <<"\n";
+	file <<"Mt->U0" << ";" << "\n";
+	file <<"Mt->A0" << ";" << "\n";
+
+
+
+  //int i;
+  for(i=1; i<=n-2; i++){
+  //file << "e"<<i-1<<"[ shape = point, width = 0 ];\n";
+
+  file<<"{ rank = same; U"<<i<<"; e"<< i - 1<<"}" <<"\n";
+
+
+ }
+
+  file<<"A"<< m-1 <<"-> e0[ dir = none, color = \"white\" ];" <<"\n";
+
+  for(i=1; i<n-2; i++){
+
+  file<<"e"<< i-1 <<"-> e"<< i<<"[ dir = none, color = \"white\" ];" <<"\n";
+
+
+}
 
 
 	file << "}\n";
 	file.close();
+
+
 }
 
 int main(){ //Main
@@ -544,11 +856,35 @@ int main(){ //Main
 	ip.close();
 
 
+
 		s->readElements();
 		s->printMatrix();
 		s->graphvizMatrix();
 
 		delete s;
+
+
+		//counter3 = 0;
+
+
+    //int _dato = 11;  // elemenento a ingresar
+		/*string numero = "01";
+    _dato  = atoi(numero.c_str());*/
+
+
+                 //insertarFinal(lista, _dato );
+
+                 cout << "\n\n MOSTRANDO LISTA\n\n";
+                 reportarLista(lista);
+
+                /* if(buscarElemento(lista, _dato) == true){
+									 cout<<"Encontrado"<< "\n";
+								 }
+								 else {
+									 cout<<"No Encontrado"<< "\n";
+								 }*/
+
+                 //eliminarElemento(lista, _dato);
 
 	system("pause");
 	return 0;
