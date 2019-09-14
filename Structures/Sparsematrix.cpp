@@ -18,6 +18,7 @@ typedef struct nodo *Tlista;
 
 Tlista lista = NULL;
 
+Tlista listam = NULL;
 
 void insertarFinal(Tlista &lista, int valor)
 {
@@ -77,8 +78,20 @@ void reportarLista(Tlista lista)
      }
 }
 
+void eliminarLista(Tlista lista)
+{
 
-void eliminarElemento(Tlista &lista, int valor)
+     while(lista != NULL)
+     {
+          //cout <<' '<< i+1 <<") " << lista->nro << endl;
+          lista->nro;
+          delete(lista);
+          lista = lista->sgte;
+     }
+}
+
+
+void eliminarElemento(Tlista &lista)
 {
     Tlista p, ant;
     p = lista;
@@ -87,7 +100,7 @@ void eliminarElemento(Tlista &lista, int valor)
     {
         while(p!=NULL)
         {
-            if(p->nro==valor)
+            /*if(p->nro==valor)
             {
                 if(p==lista)
                     lista = lista->sgte;
@@ -96,9 +109,10 @@ void eliminarElemento(Tlista &lista, int valor)
 
                 delete(p);
                 return;
-            }
+            }*/
             ant = p;
             p = p->sgte;
+            delete(ant);
         }
     }
     else
@@ -475,9 +489,9 @@ private:
 public:
 	SM(int rows, int columns);
 	~SM();
-	void readElements();
+	void readElements(string capa);
 	void printMatrix();
-	void graphvizMatrix();
+	void graphvizMatrix(string capa);
 	//SM * addSM(SM &other);
 };
 void SM::insertEntry(int rowIndex, int colIndex, string val){ //Insertar nodo
@@ -600,9 +614,9 @@ SM::~SM(){ // Destruyecdo la matriz
 
 	cout << "Sparse Matrix has been destroyed" << endl;
 }
-void SM::readElements(){ //Ingresando elementos matriz
+void SM::readElements(string capa){ //Ingresando elementos matriz
 		{
-			ifstream ip("f.csv");
+			ifstream ip(capa);
 
 		  if(!ip.is_open()) std::cout << "ERROR: File Open" << '\n';
 
@@ -646,7 +660,7 @@ void SM::readElements(){ //Ingresando elementos matriz
 
 		  ip.close();
 
-		  ifstream ip2("f.csv");
+		  ifstream ip2(capa);
 
 		  if(!ip2.is_open()) std::cout << "ERROR: File Open" << '\n';
 
@@ -715,13 +729,13 @@ void SM::printMatrix(){ //Imprimir matrix
 	cout << endl << "-----------------------------------------------------------" << endl;
 }
 
-void SM::graphvizMatrix(){ //Crear graphviz matrix
+void SM::graphvizMatrix(string capa){ //Crear graphviz matrix
 
 
 
 
 	//ofstream file;
-	file.open("Matrix.dot");
+	file.open(capa +".dot");
   file << "digraph Sparce_Matrix {\n";
   file << "node [shape=box]\n";
   file << "Mt[ label = \"Matrix\", width = 1.5, style = filled, group = 1 ];\n";
@@ -809,83 +823,315 @@ void SM::graphvizMatrix(){ //Crear graphviz matrix
 
 }
 
+
+void menu1()
+{
+    cout<<"\n\t\tPHOTGEN++\n\n";
+    cout<<" 1. INSERT IMAGE               "<<endl;
+    cout<<" 2. SELECT IMAGE               "<<endl;
+    cout<<" 3. APPLY FILTERS              "<<endl;
+    cout<<" 4. MANUAL EDITING             "<<endl;
+    cout<<" 5. EXPORT IMAGE               "<<endl;
+    cout<<" 6. REPORTS                    "<<endl;
+    cout<<" 7. SALIR                      "<<endl;
+
+
+    cout<<"\n INGRESE OPCION: ";
+}
+
+inicial(string inicial){
+
+  int w = 0;
+  int h = 0;
+
+  ifstream ip(inicial);
+
+  if(!ip.is_open()) std::cout << "ERROR: File Open" << '\n';
+
+  string dato;
+  /*string lastname;
+  string age;
+  string weight;
+  string a;*/
+  int count = 0;
+  int count2 = 0;
+  int rw, rh;
+
+  while(ip.good()){
+
+    getline(ip,dato,'\n');
+    std::string s = dato;
+    //std::cout << "cadena: "<<s<< '\n';
+    std::string delimiter = ";";
+
+    size_t pos = 0;
+    std::string token;
+    //count2 = 0;
+    while ((pos = s.find(delimiter)) != std::string::npos) {
+        token = s.substr(0, pos);
+        //std::cout << token << std::endl;
+        //std::cout << count2 << std::endl;
+        count2 = count2 +1;
+        s.erase(0, pos + delimiter.length());
+    }
+    count2 = count2 + 1;
+    //std::cout << s << std::endl;
+
+    count = count + 1;
+
+  }
+
+  int count3 = count2/(count - 1);
+  ip.close();
+
+  ifstream ip2(inicial);
+
+  if(!ip2.is_open()) std::cout << "ERROR: File Open" << '\n';
+
+  string dato2;
+
+  int row = 0;
+
+  while(ip2.good() && row < count - 1){
+
+    int column = 0;
+    while(column < count3 - 1){
+      getline(ip2,dato2,';');
+      /*if(dato2 != "x"){
+        insertEntry(row, column, dato2);
+      }*/
+      if(row > 0){
+
+        if (dato2 == "0"){
+        std::cout << "Archivo de configuracion"<< '\n';
+        std::cout << "Layer: "<<dato2<< '\n';
+      }
+      else{
+        std::cout << "Capas imagen"<< '\n';
+        std::cout << "Layer: "<<dato2<< '\n';
+
+      }
+
+      }
+      //std::cout << "Column: "<<column<< '\n';
+      column = column + 1;
+
+    }
+    getline(ip2,dato2,'\n');
+    /*if(dato2 != "x"){
+    insertEntry(row, column, dato2);
+  }*/
+
+    if(row > 0){
+
+      if(dato2 == "config.csv"){
+
+        std::cout << "Nombre: "<<dato2<< '\n';
+        //std::cout << "Column: "<< column << '\n';
+        //std::cout << "Row: "<<row << '\n';
+
+        ifstream ip(dato2);
+
+        if(!ip.is_open()) std::cout << "ERROR: File Open" << '\n';
+
+        string dato;
+        int count = 0;
+        int count2 = 0;
+
+        while(ip.good()){
+
+          getline(ip,dato,'\n');
+          std::string s = dato;
+          std::string delimiter = ";";
+
+          size_t pos = 0;
+          std::string token;
+          while ((pos = s.find(delimiter)) != std::string::npos) {
+              token = s.substr(0, pos);
+              count2 = count2 +1;
+              s.erase(0, pos + delimiter.length());
+          }
+          count2 = count2 + 1;
+          count = count + 1;
+
+        }
+
+        int count3 = count2/(count - 1);
+        ip.close();
+
+        ifstream ip2(dato2);
+
+        if(!ip2.is_open()) std::cout << "ERROR: File Open" << '\n';
+
+        string dato2;
+
+        int row = 0;
+
+        while(ip2.good() && row < count - 1){
+
+          int column = 0;
+          while(column < count3 - 1){
+            getline(ip2,dato2,';');
+            column = column + 1;
+            if(row > 0){
+              if(dato2 == "image_width"){
+                std::cout << "Image width: "<<'\n';
+                rw = row;
+
+              }
+              else if(dato2 == "image_height"){
+                std::cout << "Image heigth: "<<'\n';
+                //std::cout <<row<<'\n';
+                rh = row;
+
+              }
+              else if(dato2 == "pixel_width"){
+                std::cout << "Pixel width: "<<'\n';
+              }
+              else if(dato2 == "pixel_height"){
+                std::cout << "Pixel heigth: "<<'\n';
+              }
+            }
+
+          }
+          getline(ip2,dato2,'\n');
+
+              std::cout <<dato2<<'\n';
+
+              if(row == rw){
+                w = atoi(dato2.c_str());
+              }
+              else if(row == rh){
+                h = atoi(dato2.c_str());
+              }
+
+          row = row + 1;
+
+        }
+        ip2.close();
+
+      }
+      else{
+        std::cout << "Nombre: "<<dato2<< '\n';
+
+        cout<<h<<"\n";
+        cout<<w<<"\n";
+
+        std::string capa = dato2;
+        std::string delimiter = ".csv";
+
+        size_t pos = 0;
+        std::string token;
+        int count = 0;
+        while ((pos = capa.find(delimiter)) != std::string::npos) {
+            token = capa.substr(0, pos);
+            //std::cout << token << std::endl;
+            //count = count +1;
+            //std::cout << count << std::endl;
+            capa.erase(0, pos + delimiter.length());
+        }
+
+        SM *s = new SM(h, w); // Creando sparse matrix 1
+
+                    s->readElements(dato2);
+                		s->printMatrix();
+                		s->graphvizMatrix(token);
+
+                		delete s;
+
+                    cout<<"Reporte 1"<<"\n";
+                    reportarLista(lista);
+                    eliminarElemento(lista);
+                    cout<<"Reporte 2"<<"\n";
+                    reportarLista(lista);
+
+
+      }
+
+    }
+
+
+    row = row + 1;
+
+  }
+  ip2.close();
+
+
+}
+
 int main(){ //Main
 
-	ifstream ip("f.csv");
-
-	if(!ip.is_open()) std::cout << "ERROR: File Open" << '\n';
-
-	string dato;
-	/*string lastname;
-	string age;
-	string weight;
-	string a;*/
-	int count = 0;
-	int count2 = 0;
-
-	while(ip.good()){
-
-		getline(ip,dato,'\n');
-		std::string s = dato;
-		//std::cout << "cadena: "<<s<< '\n';
-		std::string delimiter = ";";
-
-		size_t pos = 0;
-		std::string token;
-		//count2 = 0;
-		while ((pos = s.find(delimiter)) != std::string::npos) {
-				token = s.substr(0, pos);
-				//std::cout << token << std::endl;
-				//std::cout << count2 << std::endl;
-				count2 = count2 +1;
-				s.erase(0, pos + delimiter.length());
-		}
-		count2 = count2 + 1;
-		//std::cout << s << std::endl;
-
-		count = count + 1;
-
-	}
-
-	//std::cout << "Filas: "<<count - 1<< '\n';
-	int count3 = count2/(count - 1);
-	//std::cout << "Columnas: "<<count3<< '\n';
-
-	SM *s = new SM(count - 1, count3); // Creando sparse matrix 1
-
-	ip.close();
+  int op;     // opcion del menu
+  string ainicial;
 
 
+    do
+    {
+        menu1();  cin>> op;
 
-		s->readElements();
-		s->printMatrix();
-		s->graphvizMatrix();
-
-		delete s;
-
-
-		//counter3 = 0;
-
-
-    //int _dato = 11;  // elemenento a ingresar
-		/*string numero = "01";
-    _dato  = atoi(numero.c_str());*/
+        switch(op)
+        {
+            case 1:
+            cout<< "\n Ingrese nombre archivo inicial: ";
+            cin>> ainicial;
+            inicial(ainicial);
 
 
-                 //insertarFinal(lista, _dato );
+                 /*cout<< "\n NUMERO A INSERTAR: "; cin>> _dato;
+                 insertarInicio(lista, _dato);*/
+            break;
 
-                 cout << "\n\n MOSTRANDO LISTA\n\n";
-                 reportarLista(lista);
 
-                /* if(buscarElemento(lista, _dato) == true){
-									 cout<<"Encontrado"<< "\n";
-								 }
-								 else {
-									 cout<<"No Encontrado"<< "\n";
-								 }*/
+            case 2:
+            cout<< "\n SELECCIONAR IMAGEN: ";
 
-                 //eliminarElemento(lista, _dato);
+                 /*cout<< "\n NUMERO A INSERTAR: "; cin>> _dato;
+                 insertarFinal(lista, _dato );*/
+            break;
 
-	system("pause");
-	return 0;
+
+            case 3:
+            cout<< "\n APLICAR FILTRO: ";
+
+                 /*cout<< "\n NUMERO A INSERTAR: ";cin>> _dato;
+                 cout<< " Posicion : ";       cin>> pos;
+                 insertarElemento(lista, _dato, pos);*/
+            break;
+
+
+            case 4:
+            cout<< "\n EDITAR MANUALMENTE: ";
+
+                 /*cout << "\n\n MOSTRANDO LISTA\n\n";
+                 reportarLista(lista);*/
+            break;
+
+
+            case 5:
+            cout<< "\n EXPORTAR IMAGEN: ";
+
+                 /*cout<<"\n Valor a buscar: "; cin>> _dato;
+                 buscarElemento(lista, _dato);*/
+            break;
+
+            case 6:
+            cout<< "\n REPORTES: ";
+
+                /*cout<<"\n Valor a eliminar: "; cin>> _dato;
+
+                eliminarElemento(lista, _dato);*/
+            break;
+
+                    }
+
+        cout<<endl<<endl;
+        system("pause");  system("cls");
+
+    }while(op!=7);
+
+
+   system("pause");
+   return 0;
+
+
 }
