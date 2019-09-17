@@ -7,76 +7,23 @@
 using namespace std;
 
 ofstream file;
-ofstream filescss;
 
-string data;
-
-int counterscss = 1;
-
-class RGB
-{
-public:
-	unsigned char R;
-	unsigned char G;
-	unsigned char B;
-
-	RGB(unsigned char r, unsigned char g, unsigned char b)
-	{
-		R = r;
-		G = g;
-		B = b;
-	}
-
-	bool Equals(RGB rgb)
-	{
-		return (R == rgb.R) && (G == rgb.G) && (B == rgb.B);
-	}
-};
-
-static string DecimalToHexadecimal(int dec) {
-	if (dec < 1) return "00";
-
-	int hex = dec;
-	string hexStr = "";
-
-	while (dec > 0)
-	{
-		hex = dec % 16;
-
-		if (hex < 10)
-			hexStr = hexStr.insert(0, string(1, (hex + 48)));
-		else
-			hexStr = hexStr.insert(0, string(1, (hex + 55)));
-
-		dec /= 16;
-	}
-
-	return hexStr;
-}
-
-static string RGBToHexadecimal(RGB rgb) {
-	string rs = DecimalToHexadecimal(rgb.R);
-	string gs = DecimalToHexadecimal(rgb.G);
-	string bs = DecimalToHexadecimal(rgb.B);
-
-	return '#' + rs + gs + bs;
-}
+int data;
 
 //int counter3= 0;
 struct Nodo{
-  string dato;
+  int dato;
   Nodo *siguiente;
 };
 
-void insertarLista(Nodo *&, string);
+void insertarLista(Nodo *&, int);
 void mostrarLista(Nodo *);
-bool buscarLista(Nodo *, string);
-void eliminarLista(Nodo *&lista, string &n);
+bool buscarLista(Nodo *, int);
+void eliminarLista(Nodo *&lista, int &n);
 
 Nodo *lista = NULL;
 
-
-void insertarLista(Nodo *&lista, string n){
+void insertarLista(Nodo *&lista, int n){
   Nodo *nuevo_nodo = new Nodo();
   nuevo_nodo->dato = n;
 
@@ -108,7 +55,7 @@ void mostrarLista(Nodo *lista){
   cout<<"\n";
 }
 
-bool buscarLista(Nodo *lista, string n){
+bool buscarLista(Nodo *lista, int n){
   bool band = false;
 
   Nodo *actual = new Nodo();
@@ -129,7 +76,7 @@ bool buscarLista(Nodo *lista, string n){
   }
 }
 
-void eliminarLista(Nodo *&lista, string &n){
+void eliminarLista(Nodo *&lista, int &n){
   Nodo *aux = lista;
   n = aux->dato;
   lista = aux->siguiente;
@@ -165,7 +112,6 @@ private:
 	void printCol(int mSize); // printing column nodes inside a row node
 	void graphvizCol(int mSize, int n, int nSize);
 	void graphvizCol2(int mSize, int n);
-  void scssCol(int mSize, int n, int nSize);
 };
 RowNode::RowNode(int rowNo){ //Valor fila
 	this->rowNo = rowNo;
@@ -302,32 +248,31 @@ void RowNode::graphvizCol(int mSize, int n, int nSize){ //Imprimir columna
         if(counter2 != 0){
 
         int r = counter;
-        //cout<<r<<"\n";
+        cout<<r<<"\n";
 
         while(r > 0){
           int c = r;
           int ro = n + 1;
           string rc;
-          rc =to_string(ro) + "," + to_string(c);
-          //cout<<rc<<"\n";
-          //int _dato  = atoi(rc.c_str());
+          rc =to_string(ro) + to_string(c);
+          cout<<rc<<"\n";
+          int _dato  = atoi(rc.c_str());
 
-          if(buscarLista(lista, rc) == true){
+          if(buscarLista(lista, _dato) == true){
             //cout<<"Encontrado"<< "\n";
-            //cout<<"Nodo izquierda"<<"\n";
+            cout<<"Nodo izquierda"<<"\n";
           }
 
-          else if(buscarLista(lista, rc) == false){
+          else if(buscarLista(lista, _dato) == false){
             //cout<<"Encontrado"<< "\n";
             file<<"N"<<counter<<"_L"<<n<< " -> N" << r -1 << "_L"<< n << ";"<<"\n";
             file<<"N"<<r - 1<<"_L"<<n<< " -> N" <<counter<< "_L"<< n << ";"<<"\n";
-            //cout<<"Link Nodo previo"<<"\n";
-            //cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<"\n";
+            cout<<"Link Nodo previo"<<"\n";
             r = 1;
           }
 
           r--;
-          //cout<<r<<"\n";
+          cout<<r<<"\n";
 
         }
       }
@@ -359,28 +304,26 @@ void RowNode::graphvizCol(int mSize, int n, int nSize){ //Imprimir columna
 					 int r = c;
 					 int co= counter +1;
 					 string rc;
-					 rc =to_string(r) + "," + to_string(co);
-					 //cout<<rc<<"\n";
-					 //int _dato  = atoi(rc.c_str());
+					 rc =to_string(r) + to_string(co);
+					 cout<<rc<<"\n";
+					 int _dato  = atoi(rc.c_str());
 
-					 if(buscarLista(lista, rc) == true && c == 1){
+					 if(buscarLista(lista, _dato) == true && c == 1){
 						 //cout<<"Encontrado"<< "\n";
 						 file<<"A"<<counter << " -> N" << counter<<"_L"<<n<< ";"<<"\n";
-						 //cout<<"Link con el header"<<"\n";
-             //cout<<"++++++++++++++++++++++++++++++"<<"\n";
+						 cout<<"Link con el header"<<"\n";
 					 }
 
-					 else if(buscarLista(lista, rc) == true && c != 1){
+					 else if(buscarLista(lista, _dato) == true && c != 1){
 						 //cout<<"Encontrado"<< "\n";
-						 //cout<<"Nodo arriba"<<"\n";
+						 cout<<"Nodo arriba"<<"\n";
 					 }
 
-					 else if(buscarLista(lista, rc) == false){
+					 else if(buscarLista(lista, _dato) == false){
 						 //cout<<"Encontrado"<< "\n";
 						 file<<"N"<<counter <<"_L"<<n<< " -> N" << counter << "_L"<< c - 1<< ";"<<"\n";
 						 file<<"N"<<counter <<"_L"<<c-1<< " -> N" <<counter<< "_L"<< n << ";"<<"\n";
-						 //cout<<"Link Nodo previo"<<"\n";
-             //cout<<"-----------------------------------"<<"\n";
+						 cout<<"Link Nodo previo"<<"\n";
 						 c = 1;
 					 }
 
@@ -409,11 +352,10 @@ void RowNode::graphvizCol(int mSize, int n, int nSize){ //Imprimir columna
 				//std::string cadena = "";
 			  //cadena = std::to_string(entero);
 				string rc;
-				rc =to_string(r) + "," + to_string(c);
+				rc =to_string(r) + to_string(c);
 
-        data = rc;
+				data  = atoi(rc.c_str());
 
-				//data  = atoi(rc.c_str());
 
 		    insertarLista(lista,data);
 				//cout<<rc<<"\n";
@@ -432,10 +374,9 @@ void RowNode::graphvizCol(int mSize, int n, int nSize){ //Imprimir columna
 			//std::string cadena = "";
 			//cadena = std::to_string(entero);
 			string rc;
-			rc =to_string(r) + "," + to_string(c);
+			rc =to_string(r) + to_string(c);
 
-			//data  = atoi(rc.c_str());
-      data = rc;
+			data  = atoi(rc.c_str());
 
 
 			insertarLista(lista, data);
@@ -497,76 +438,6 @@ void RowNode::graphvizCol2(int mSize, int n){ //Imprimir columna
 
 }
 
-void RowNode::scssCol(int mSize,int n, int nSize){ //Imprimir columna
-	int counter = 0;
-  //int counter2 = 0;
-	ColumnNode *curr = colHead;
-
-	while (counter < mSize){
-
-		if (curr != NULL){
-			if (counter == curr->colNo){
-
-				filescss << ".pixel:nth-child("<<counterscss<<")"<<"\n";
-
-        string rgb = curr->value;
-        std::string s = rgb;
-        std::string delimiter = "-";
-
-        size_t pos = 0;
-        std::string token;
-        int count = 0;
-        string c1,c2,c3;
-        while ((pos = s.find(delimiter)) != std::string::npos) {
-            token = s.substr(0, pos);
-            //std::cout << token << std::endl;
-            count = count +1;
-            if(count == 1){
-              c1 = token;
-            }
-            else if(count == 2){
-              c2 = token;
-            }
-            //std::cout << count << std::endl;
-            s.erase(0, pos + delimiter.length());
-        }
-        c3 = s;
-
-        int r,g,b;
-
-        r  = atoi(c1.c_str());
-        g  = atoi(c2.c_str());
-        b  = atoi(c3.c_str());
-
-        RGB data = RGB(r, g, b);
-        string value = RGBToHexadecimal(data);
-
-          filescss << "{"<<"\n";
-          filescss << "background:"<< value <<";"<<"\n";
-          filescss << "}"<<"\n";
-
-				curr = curr->nextCol;
-
-			}
-			else{
-
-			}
-
-      //counter2++;
-
-
-		}
-		else{
-
-
-		}
-		counter++;
-    counterscss++;
-
-	}
-
-}
-
 class SM{ //Clase Sparse Matrix
 private:
 	int n, m; // max number of rows and columns
@@ -578,8 +449,6 @@ private:
 	void printColumnHeader();// will print out the column numbers ( ex 1 2 3 4 5 6 7 8 9 10)
 	void graphvizColumnHeader();
 	void printEmptyRow(int counter); // will print out an empty row for the counter number (ex 5| 0 0 0 0 0 0)
-  void graphvizEmptyRow(int counter);
-  void scssEmptyRow(int counter);
 
 public:
 	SM(int rows, int columns);
@@ -587,7 +456,6 @@ public:
 	void readElements(string capa);
 	void printMatrix();
 	void graphvizMatrix(string capa);
-  void scsscapas(string capa);
 	//SM * addSM(SM &other);
 };
 
@@ -696,39 +564,6 @@ void SM::printEmptyRow(int counter){ //Imprimir filas vacias
 	}
 	cout << endl;
 }
-
-void SM::graphvizEmptyRow(int counter){ //Imprimir filas vacias
-
-  int r = counter +1;
-
-	for (int i = 0; i < m; i++){
-		//cout << setw(5) << right << "0";
-    int c= i + 1;
-    //std::string cadena = "";
-    //cadena = std::to_string(entero);
-    string rc;
-    rc =to_string(r) + "," + to_string(c);
-
-    //data  = atoi(rc.c_str());
-
-    data = rc;
-
-    //cout<<data<<"\n";
-
-    insertarLista(lista, data);
-	}
-	//cout << endl;
-}
-
-void SM::scssEmptyRow(int counter){ //Imprimir filas vacias
-
-	for (int i = 0; i < m; i++){
-    counterscss++;
-
-	}
-
-}
-
 SM::SM(int rows, int columns){ // Creando la matriz
 	n = rows;
 	m = columns;
@@ -850,18 +685,10 @@ void SM::printMatrix(){ //Imprimir matrix
 				cout << endl;
 			}
 			else // No sirve de nada
-      {
-        printEmptyRow(counter);
-
-      }
-
+				printEmptyRow(counter);
 		}
 		else
-    {
-      printEmptyRow(counter);
-
-    }
-
+			printEmptyRow(counter);
 		counter++;
 	}
 	cout << endl << "-----------------------------------------------------------" << endl;
@@ -922,12 +749,10 @@ void SM::graphvizMatrix(string capa){ //Crear graphviz matrix
 				cout << endl;
 			}
 			else {// No sirve de nada
-        graphvizEmptyRow(counter);
 
       }
 		}
 		else{
-      graphvizEmptyRow(counter);
 
   }
 
@@ -963,89 +788,6 @@ void SM::graphvizMatrix(string capa){ //Crear graphviz matrix
 
 }
 
-void SM::scsscapas(string capa){ //Crear graphviz matrix
-
-  file << "Colores capa"<<"\n";
-
-	int counter = 0;
-	RowNode * curr = rowHead;
-	while (counter < n){
-
-		if (curr != NULL){
-			if (counter == curr->rowNo){
-				curr->scssCol(m, counter, n);
-				//curr->graphvizCol2(m);
-				curr = curr->nextRow;
-				cout << endl;
-			}
-			else {
-        scssEmptyRow(counter);
-
-      }
-		}
-		else{
-      scssEmptyRow(counter);
-
-  }
-
-		counter++;
-	}
-
-
-}
-
-void html(string nombre, int div){ //Crear graphviz matrix
-
-	file.open(nombre +".html");
-  file << "<!DOCTYPE html>\n";
-  file << "<html>\n";
-  file << "<head>\n";
-	file << "<!-- Link to our stylesheet Painting our Pixel Art -->\n";
-  file << "<link rel=\"stylesheet\" href=\""<< nombre <<".scss\">\n";
-  file << "</head>\n";
-  file << "<body>\n";
-	file << "<!-- div container representing the canvas -->\n";
-  file << "<div class=\"canvas\">\n";
-  file << "<!-- div containers representing each pixel of the drawing (18px x 21px = 378 pixels) -->\n";
-  int count = 0;
-  while(count < div){
-    file<<"<div class=\"pixel\"></div>\n";
-    count++;
-  }
-
-  file << "</div>\n";
-	file << "</body>\n";
-  file << "</html>\n";
-	file.close();
-
-}
-
-void scss(int wp, int hp, int w, int h){ //Crear graphviz matrix
-
-  int ch = hp * h;
-  int cw = wp * w;
-
-	//file.open(nombre +".scss");
-  filescss << "body {\n";
-  filescss << "background: #C0C0C0;\n";
-  filescss << "height: 100vh;\n";
-	filescss << "display: flex;\n";
-  filescss << "justify-content: center;\n";
-  filescss << "align-items: center;\n";
-  filescss << "}\n";
-	filescss << ".canvas {\n";
-  filescss << "width:"<< cw <<"px;\n";
-  filescss << "height:"<< ch <<"px;\n";
-  filescss << "}\n";
-	filescss << ".pixel {\n";
-  filescss << "width: "<< wp <<"px;\n";
-  filescss << "height: "<< hp << "px;\n";
-  filescss << "float: left;\n";
-  filescss << "}\n";
-	//file.close();
-
-}
-
 
 void menu1()
 {
@@ -1064,28 +806,8 @@ void menu1()
 
 inicial(string inicial){
 
-  std::string archivo = inicial;
-  std::string delimiter = ".csv";
-
-  size_t pos = 0;
-  std::string nombre;
-
-  while ((pos = archivo.find(delimiter)) != std::string::npos) {
-      nombre = archivo.substr(0, pos);
-      //std::cout << token << std::endl;
-      //count = count +1;
-      //std::cout << count << std::endl;
-      archivo.erase(0, pos + delimiter.length());
-  }
-
-  filescss.open(nombre +".scss");
-
-
-
   int w = 0;
   int h = 0;
-  int pw = 0;
-  int ph = 0;
 
   ifstream ip(inicial);
 
@@ -1098,7 +820,7 @@ inicial(string inicial){
   string a;*/
   int count = 0;
   int count2 = 0;
-  int rw, rh, rpw, rph;
+  int rw, rh;
 
   while(ip.good()){
 
@@ -1125,7 +847,7 @@ inicial(string inicial){
   }
 
   int count3 = count2/(count - 1);
-  ip.close(); // cerrando aux archivo imagen inicial
+  ip.close();
 
   ifstream ip2(inicial);
 
@@ -1230,11 +952,9 @@ inicial(string inicial){
               }
               else if(dato2 == "pixel_width"){
                 std::cout << "Pixel width: "<<'\n';
-                rpw = row;
               }
               else if(dato2 == "pixel_height"){
                 std::cout << "Pixel heigth: "<<'\n';
-                rph = row;
               }
             }
 
@@ -1249,30 +969,18 @@ inicial(string inicial){
               else if(row == rh){
                 h = atoi(dato2.c_str());
               }
-              else if(row == rpw){
-                pw = atoi(dato2.c_str());
-              }
-              else if(row == rph){
-                ph = atoi(dato2.c_str());
-              }
 
           row = row + 1;
 
         }
         ip2.close();
 
-        scss(pw,ph,w,h);
-
       }
       else{
         std::cout << "Nombre: "<<dato2<< '\n';
 
-        /*cout<<h<<"\n";
+        cout<<h<<"\n";
         cout<<w<<"\n";
-        cout<<ph<<"\n";
-        cout<<pw<<"\n";*/
-
-
 
         std::string capa = dato2;
         std::string delimiter = ".csv";
@@ -1293,22 +1001,14 @@ inicial(string inicial){
                     ms ->readElements(dato2);
                 		ms ->printMatrix();
                 		ms ->graphvizMatrix(token);
-                    ms ->scsscapas(token);
-
-                    counterscss = 1;
-
 
                 		delete ms;
 
-                    //mostrarLista(lista);
+                    mostrarLista(lista);
 
                     while(lista != NULL){
                     eliminarLista(lista,data);
                     }
-
-
-
-
 
 
                     /*cout<<"Reporte 1"<<"\n";
@@ -1323,19 +1023,11 @@ inicial(string inicial){
     }
 
 
-
     row = row + 1;
 
   }
-  ip2.close(); // cerrando archivo imagen inicial
+  ip2.close();
 
-
-
-  int div= h*w;
-
-  html(nombre,div);
-
-  filescss.close();
 
 }
 

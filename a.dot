@@ -62,7 +62,12 @@ N1_L2 [label = "255-92-92" width = 1.5, group =3];
 U2 -> N1_L2;
 N1_L2 -> N1_L1;
 N1_L1 -> N1_L2;
-{ rank = same; U2;N1_L2;}
+N3_L2 [label = "255-92-92" width = 1.5, group =5];
+N3_L2 -> N1_L2;
+N1_L2 -> N3_L2;
+N3_L2 -> N3_L1;
+N3_L1 -> N3_L2;
+{ rank = same; U2;N1_L2;N3_L2;}
 U3[label = "R3"    width = 1.5 style = filled, group = 1 ];
 U3->U4;
 U3->U2;
@@ -70,7 +75,12 @@ N1_L3 [label = "255-92-92" width = 1.5, group =3];
 U3 -> N1_L3;
 N1_L3 -> N1_L2;
 N1_L2 -> N1_L3;
-{ rank = same; U3;N1_L3;}
+N3_L3 [label = "255-92-92" width = 1.5, group =5];
+N3_L3 -> N1_L3;
+N1_L3 -> N3_L3;
+N3_L3 -> N3_L2;
+N3_L2 -> N3_L3;
+{ rank = same; U3;N1_L3;N3_L3;}
 U4[label = "R4"    width = 1.5 style = filled, group = 1 ];
 U4->U5;
 U4->U3;
@@ -86,8 +96,8 @@ N2_L1 -> N2_L4;
 N3_L4 [label = "255-92-92" width = 1.5, group =5];
 N3_L4 -> N2_L4;
 N2_L4 -> N3_L4;
-N3_L4 -> N3_L1;
-N3_L1 -> N3_L4;
+N3_L4 -> N3_L3;
+N3_L3 -> N3_L4;
 { rank = same; U4;N1_L4;N2_L4;N3_L4;}
 U5[label = "R5"    width = 1.5 style = filled, group = 1 ];
 U5->U6;
@@ -114,7 +124,12 @@ N1_L6 [label = "255-92-92" width = 1.5, group =3];
 U6 -> N1_L6;
 N1_L6 -> N1_L5;
 N1_L5 -> N1_L6;
-{ rank = same; U6;N1_L6;}
+N3_L6 [label = "255-92-92" width = 1.5, group =5];
+N3_L6 -> N1_L6;
+N1_L6 -> N3_L6;
+N3_L6 -> N3_L5;
+N3_L5 -> N3_L6;
+{ rank = same; U6;N1_L6;N3_L6;}
 U7[label = "R7"    width = 1.5 style = filled, group = 1 ];
 U7->U8;
 U7->U6;
@@ -122,7 +137,12 @@ N1_L7 [label = "255-92-92" width = 1.5, group =3];
 U7 -> N1_L7;
 N1_L7 -> N1_L6;
 N1_L6 -> N1_L7;
-{ rank = same; U7;N1_L7;}
+N3_L7 [label = "255-92-92" width = 1.5, group =5];
+N3_L7 -> N1_L7;
+N1_L7 -> N3_L7;
+N3_L7 -> N3_L6;
+N3_L6 -> N3_L7;
+{ rank = same; U7;N1_L7;N3_L7;}
 U8[label = "R8"    width = 1.5 style = filled, group = 1 ];
 U8->U9;
 U8->U7;
@@ -130,7 +150,12 @@ N1_L8 [label = "255-92-92" width = 1.5, group =3];
 U8 -> N1_L8;
 N1_L8 -> N1_L7;
 N1_L7 -> N1_L8;
-{ rank = same; U8;N1_L8;}
+N3_L8 [label = "255-92-92" width = 1.5, group =5];
+N3_L8 -> N1_L8;
+N1_L8 -> N3_L8;
+N3_L8 -> N3_L7;
+N3_L7 -> N3_L8;
+{ rank = same; U8;N1_L8;N3_L8;}
 U9[label = "R9"    width = 1.5 style = filled, group = 1 ];
 U9->U8;
 N1_L9 [label = "255-92-92" width = 1.5, group =3];
@@ -138,7 +163,13 @@ U9 -> N1_L9;
 N1_L9 -> N1_L8;
 N1_L8 -> N1_L9;
 e7-> N1_L9[dir = none, color = "white"];
-{ rank = same; U9;N1_L9;}
+N3_L9 [label = "255-92-92" width = 1.5, group =5];
+N3_L9 -> N1_L9;
+N1_L9 -> N3_L9;
+N3_L9 -> N3_L8;
+N3_L8 -> N3_L9;
+e7-> N3_L9[dir = none, color = "white"];
+{ rank = same; U9;N1_L9;N3_L9;}
 Mt->U0;
 Mt->A0;
 { rank = same; U1; e0}
