@@ -2,83 +2,8 @@ digraph Sparce_Matrix {
 node [shape=box]
 Mt[ label = "Matrix", width = 1.5, style = filled, group = 1 ];
 e0[ shape = point, width = 0 ];
-e1[ shape = point, width = 0 ];
-e2[ shape = point, width = 0 ];
-e3[ shape = point, width = 0 ];
-e4[ shape = point, width = 0 ];
-e5[ shape = point, width = 0 ];
-e6[ shape = point, width = 0 ];
-e7[ shape = point, width = 0 ];
-e8[ shape = point, width = 0 ];
-e9[ shape = point, width = 0 ];
-e10[ shape = point, width = 0 ];
-e11[ shape = point, width = 0 ];
-e12[ shape = point, width = 0 ];
-e13[ shape = point, width = 0 ];
-A0[label ="C0" width = 1.5 style = filled, group =2];
-A0->A1;
-A1[label ="C1" width = 1.5 style = filled, group =3];
-A1->A2;
-A1->A0;
-A2[label ="C2" width = 1.5 style = filled, group =4];
-A2->A3;
-A2->A1;
-A3[label ="C3" width = 1.5 style = filled, group =5];
-A3->A4;
-A3->A2;
-A4[label ="C4" width = 1.5 style = filled, group =6];
-A4->A5;
-A4->A3;
-A5[label ="C5" width = 1.5 style = filled, group =7];
-A5->A6;
-A5->A4;
-A6[label ="C6" width = 1.5 style = filled, group =8];
-A6->A7;
-A6->A5;
-A7[label ="C7" width = 1.5 style = filled, group =9];
-A7->A8;
-A7->A6;
-A8[label ="C8" width = 1.5 style = filled, group =10];
-A8->A9;
-A8->A7;
-A9[label ="C9" width = 1.5 style = filled, group =11];
-A9->A10;
-A9->A8;
-A10[label ="C10" width = 1.5 style = filled, group =12];
-A10->A11;
-A10->A9;
-A11[label ="C11" width = 1.5 style = filled, group =13];
-A11->A12;
-A11->A10;
-A12[label ="C12" width = 1.5 style = filled, group =14];
-A12->A13;
-A12->A11;
-A13[label ="C13" width = 1.5 style = filled, group =15];
-A13->A14;
-A13->A12;
-A14[label ="C14" width = 1.5 style = filled, group =16];
-A14->A15;
-A14->A13;
-A15[label ="C15" width = 1.5 style = filled, group =17];
-A15->A14;
-{ rank = same; Mt; A0; A1; A2; A3; A4; A5; A6; A7; A8; A9; A10; A11; A12; A13; A14; A15; }
-U0[label = "R0"    width = 1.5 style = filled, group = 1 ];
-U0->U1;
-U1[label = "R1"    width = 1.5 style = filled, group = 1 ];
-U1->U2;
-U1->U0;
-U2[label = "R2"    width = 1.5 style = filled, group = 1 ];
-U2->U3;
-U2->U1;
-U3[label = "R3"    width = 1.5 style = filled, group = 1 ];
-U3->U4;
-U3->U2;
-U4[label = "R4"    width = 1.5 style = filled, group = 1 ];
-U4->U5;
-U4->U3;
 U5[label = "R5"    width = 1.5 style = filled, group = 1 ];
-U5->U6;
-U5->U4;
+Mt->U5;
 N4_L5 [label = "255-255-255" width = 1.5, group =6];
 U5 -> N4_L5;
 A4 -> N4_L5;
@@ -88,8 +13,8 @@ N4_L5 -> N11_L5;
 A11 -> N11_L5;
 { rank = same; U5;N4_L5;N11_L5;}
 U6[label = "R6"    width = 1.5 style = filled, group = 1 ];
-U6->U7;
-U6->U5;
+U6 -> U5;
+U5 -> U6;
 N4_L6 [label = "255-255-255" width = 1.5, group =6];
 U6 -> N4_L6;
 N4_L6 -> N4_L5;
@@ -117,8 +42,9 @@ N11_L6 -> N11_L5;
 N11_L5 -> N11_L6;
 { rank = same; U6;N4_L6;N5_L6;N6_L6;N9_L6;N10_L6;N11_L6;}
 U7[label = "R7"    width = 1.5 style = filled, group = 1 ];
-U7->U8;
-U7->U6;
+U7 -> U6;
+U6 -> U7;
+{ rank = same; U6; e0}
 N4_L7 [label = "255-255-255" width = 1.5, group =6];
 U7 -> N4_L7;
 N4_L7 -> N4_L6;
@@ -149,57 +75,23 @@ N10_L7 -> N11_L7;
 N11_L7 -> N11_L6;
 N11_L6 -> N11_L7;
 { rank = same; U7;N4_L7;N5_L7;N6_L7;N9_L7;N10_L7;N11_L7;}
-U8[label = "R8"    width = 1.5 style = filled, group = 1 ];
-U8->U9;
-U8->U7;
-U9[label = "R9"    width = 1.5 style = filled, group = 1 ];
-U9->U10;
-U9->U8;
-U10[label = "R10"    width = 1.5 style = filled, group = 1 ];
-U10->U11;
-U10->U9;
-U11[label = "R11"    width = 1.5 style = filled, group = 1 ];
-U11->U12;
-U11->U10;
-U12[label = "R12"    width = 1.5 style = filled, group = 1 ];
-U12->U13;
-U12->U11;
-U13[label = "R13"    width = 1.5 style = filled, group = 1 ];
-U13->U14;
-U13->U12;
-U14[label = "R14"    width = 1.5 style = filled, group = 1 ];
-U14->U15;
-U14->U13;
-U15[label = "R15"    width = 1.5 style = filled, group = 1 ];
-U15->U14;
-Mt->U0;
-Mt->A0;
-{ rank = same; U1; e0}
-{ rank = same; U2; e1}
-{ rank = same; U3; e2}
-{ rank = same; U4; e3}
-{ rank = same; U5; e4}
-{ rank = same; U6; e5}
-{ rank = same; U7; e6}
-{ rank = same; U8; e7}
-{ rank = same; U9; e8}
-{ rank = same; U10; e9}
-{ rank = same; U11; e10}
-{ rank = same; U12; e11}
-{ rank = same; U13; e12}
-{ rank = same; U14; e13}
-A15-> e0[ dir = none, color = "white" ];
-e0-> e1[ dir = none, color = "white" ];
-e1-> e2[ dir = none, color = "white" ];
-e2-> e3[ dir = none, color = "white" ];
-e3-> e4[ dir = none, color = "white" ];
-e4-> e5[ dir = none, color = "white" ];
-e5-> e6[ dir = none, color = "white" ];
-e6-> e7[ dir = none, color = "white" ];
-e7-> e8[ dir = none, color = "white" ];
-e8-> e9[ dir = none, color = "white" ];
-e9-> e10[ dir = none, color = "white" ];
-e10-> e11[ dir = none, color = "white" ];
-e11-> e12[ dir = none, color = "white" ];
-e12-> e13[ dir = none, color = "white" ];
+A4[label ="C4" width = 1.5 style = filled, group =2];
+Mt->A4;
+A5[label ="C5" width = 1.5 style = filled, group =3];
+A5->A4;
+A4->A5;
+A6[label ="C6" width = 1.5 style = filled, group =4];
+A6->A5;
+A5->A6;
+A9[label ="C9" width = 1.5 style = filled, group =5];
+A9->A6;
+A6->A9;
+A10[label ="C10" width = 1.5 style = filled, group =6];
+A10->A9;
+A9->A10;
+A11[label ="C11" width = 1.5 style = filled, group =7];
+A11->A10;
+A10->A11;
+{ rank = same; Mt; A4; A5; A6; A9; A10; A11; }
+A11-> e0[ dir = none, color = "white" ];
 }

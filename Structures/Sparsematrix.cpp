@@ -10,8 +10,14 @@ ofstream file;
 ofstream filescss;
 
 string data;
+string data2;
+string data3;
 
 int counterscss = 1;
+
+int countere = 0;
+
+int count4 = 0;
 
 class RGB
 {
@@ -74,6 +80,10 @@ bool buscarLista(Nodo *, string);
 void eliminarLista(Nodo *&lista, string &n);
 
 Nodo *lista = NULL;
+
+Nodo *lista2 = NULL;
+
+Nodo *lista3 = NULL;
 
 
 void insertarLista(Nodo *&lista, string n){
@@ -393,8 +403,8 @@ void RowNode::graphvizCol(int mSize, int n, int nSize){ //Imprimir columna
 
 			 }
 
-       if(n == nSize - 1){
-         file<<"e"<< n-2 <<"-> N"<<counter<<"_L"<<n<<"[dir = none, color = \"white\"];"<<"\n";
+       if(n == countere + 2){
+         file<<"e"<< countere <<"-> N"<<counter<<"_L"<<n<<"[dir = none, color = \"white\"];"<<"\n";
        }
 
 			 //Prueba fin
@@ -588,6 +598,7 @@ public:
 	void printMatrix();
 	void graphvizMatrix(string capa);
   void scsscapas(string capa);
+	void graphvizMatrix2();
 	//SM * addSM(SM &other);
 };
 
@@ -663,30 +674,128 @@ void SM::printColumnHeader(){ //Imprimir headers
 
 void SM::graphvizColumnHeader(){ //Imprimir headers
 
+    int count = 0;
+    int count2 = 0;
+    int count3 = 0;
+
 
 	for (int i = 0; i < m; i++){
 		//cout << right << setw(5) << i;
-		file <<"A"<<i<< "[label =\"C"<<i<<"\" width = 1.5 style = filled, group ="<<2+i<<"];"<<"\n";
-		if (i != m-1){
+
+    while (count <= n){
+
+    int r = count+1;
+    int co= i+1;
+    string rc;
+
+    rc =to_string(r) + "," + to_string(co);
+    //cout<<rc<<"\n";
+    //int _dato  = atoi(rc.c_str());
+
+    if(buscarLista(lista, rc) == true){
+      count2++;
+
+    }
+    count++;
+  }
+
+    if(count2 < n){
+
+    file <<"A"<<i<< "[label =\"C"<<i<<"\" width = 1.5 style = filled, group ="<<count3 + 2<<"];"<<"\n";
+		/*if (i != m-1){
 		file<<"A"<< i <<"->" <<"A"<< i + 1 <<";" <<"\n";
 	  }
 		if (i > 0){
-		file<<"A"<< i <<"->" <<"A"<< i - 1 <<";" <<"\n";
+		file<<"A"<< i <<"->" <<"A"<< i - 1 <<";" <<"\n";*/
+
+    if(count3 == 0){
+
+      file <<"Mt->A"<<i<< ";" << "\n";
+
+    }
+
+    else if(count3 != 0){
+
+      int co = i;
+
+      while(co > 0){
+        int c = co -1;
+        string rc;
+        rc = to_string(c);
+
+
+        if(buscarLista(lista3, rc) == true){
+          //cout<<"Encontrado"<< "\n";
+          //cout<<"Nodo izquierda"<<"\n";
+        }
+
+        else if(buscarLista(lista3, rc) == false){
+          //cout<<"Encontrado"<< "\n";
+          file<<"A"<< i <<"->" <<"A"<< co - 1 <<";" <<"\n";
+          file<<"A"<< co - 1 <<"->" <<"A"<< i <<";" <<"\n";
+          //cout<<"Link Nodo previo"<<"\n";
+          //cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<"\n";
+          co = 1;
+        }
+
+        co--;
+        //cout<<r<<"\n";
+
+      }
+
+
+
+    }
+
+    count3++;
 	  }
+    else{
+
+      string co;
+
+      co =to_string(i);
+
+      data3 = co;
+
+      insertarLista(lista3,data3);
+
+    }
+
+    count = 0;
+    count2 = 0;
+  }
 
 		//file << i << "\n";
-	}
 	//cout << endl;
 	file <<"{ rank = same; Mt; ";
 
+
 	for (int i = 0; i < m; i++){
-		//cout << right << setw(5) << i;
-		file <<"A"<<i<<"; ";
+    int co = i;
+      string rc;
+      rc = to_string(co);
 
 
-		//file << i << "\n";
+      if(buscarLista(lista3, rc) == true){
+        //cout<<"Encontrado"<< "\n";
+        //cout<<"Nodo izquierda"<<"\n";
+      }
+
+      else{
+        //cout << right << setw(5) << i;
+        file <<"A"<<i<<"; ";
+
+        count4 = i;
+
+        //file << i << "\n";
+
+      }
+
+
 	}
 	file <<"}"<<"\n";
+
+
 
 }
 
@@ -878,19 +987,23 @@ void SM::graphvizMatrix(string capa){ //Crear graphviz matrix
   file << "node [shape=box]\n";
   file << "Mt[ label = \"Matrix\", width = 1.5, style = filled, group = 1 ];\n";
 
+	graphvizMatrix2();
+
   int i;
-  for(i=1; i<=n-2; i++){
+  /*for(i=1; i<=n-2; i++){
   file << "e"<<i-1<<"[ shape = point, width = 0 ];\n";
 
 
- }
+}*/
 
 
 
 	//dot Matrix.dot -Tpng -o Matrix.png
 
-	graphvizColumnHeader(); //Columnheaders de la matrix
+	//graphvizColumnHeader(); //Columnheaders de la matrix
 	int counter = 0;
+  int counter2 =0;
+  int counter3 = 0;
 	RowNode * curr = rowHead;
 	while (counter < n){
 		/*
@@ -901,65 +1014,203 @@ void SM::graphvizMatrix(string capa){ //Crear graphviz matrix
 		then it will print zeros for the rest of the iterations
 		*/
 		//cout << setw(3) << counter << "|"; Rowheaders de la matrix
-		file<<"U"<< counter  <<"[label = \""<<"R"<< counter <<"\"    width = 1.5 style = filled, group = 1 ];"<<"\n";
+		//file<<"U"<< counter  <<"[label = \""<<"R"<< counter <<"\"    width = 1.5 style = filled, group = 1 ];"<<"\n";
 		//file<<"U"<< counter <<"->" <<"U"<< counter + 1 <<"\n";
 
-		if (counter != n-1){
+		/*if (counter != n-1){
 		file<<"U"<< counter <<"->" <<"U"<< counter + 1 <<";" <<"\n";
 	  }
 		if (counter > 0){
 		file<<"U"<< counter <<"->" <<"U"<< counter - 1 <<";" <<"\n";
-	  }
+  }*/
 
 
 		//file<<"U"<< counter + 1<<"->" <<"U"<< counter;
 		//file << counter <<"\n";
 		if (curr != NULL){
+
 			if (counter == curr->rowNo){
+
+        //cout<<"Contador filas: "<<counter<<"\n";
+        file<<"U"<< counter  <<"[label = \""<<"R"<< counter <<"\"    width = 1.5 style = filled, group = 1 ];"<<"\n";
+
+        if(counter2 == 0){
+          file <<"Mt->U"<< counter << ";" << "\n";
+
+        }
+
+        else if (counter2 != 0){
+
+          int c = counter;
+
+ 				 while(c > 0){
+ 					 int r = c-1;
+ 					 string rc;
+ 					 rc =to_string(r);
+ 					 //cout<<rc<<"\n";
+ 					 //int _dato  = atoi(rc.c_str());
+
+           if(buscarLista(lista2, rc) == true){
+ 						 //cout<<"Encontrado"<< "\n";
+ 						 //cout<<"Nodo arriba"<<"\n";
+ 					 }
+
+ 					 else if(buscarLista(lista2, rc) == false){
+ 						 //cout<<"Encontrado"<< "\n";
+ 						 file<<"U"<<counter<<" -> U" << c -1 << ";"<<"\n";
+ 						 file<<"U"<<c - 1<<" -> U" << counter << ";"<<"\n";
+ 						 //cout<<"Link Nodo previo"<<"\n";
+             //cout<<"-----------------------------------"<<"\n";
+ 						 c = 1;
+ 					 }
+
+
+ 					 //cout<<c<<"\n";
+ 					 c--;
+
+ 				 }
+
+        }
+
+        if(counter2 > 1){
+
+          //file << "e"<<counter3<<"[ shape = point, width = 0 ];\n";
+
+          file<<"{ rank = same; U"<<counter-1<<"; e"<< counter3<<"}" <<"\n";
+
+          counter3++;
+
+        }
+
 				curr->graphvizCol(m,counter,n);
 				curr->graphvizCol2(m,counter);
 				curr = curr->nextRow;
 				cout << endl;
+        counter2++;
 			}
 			else {// No sirve de nada
+
+        string r;
+
+        r =to_string(counter);
+
+        data2 = r;
+
+		    insertarLista(lista2,data2);
+
         graphvizEmptyRow(counter);
 
       }
 		}
 		else{
+
+      string r;
+
+      r =to_string(counter);
+
+      data2 = r;
+
+      insertarLista(lista2,data2);
+
       graphvizEmptyRow(counter);
 
   }
 
 		counter++;
 	}
-	file <<"Mt->U0" << ";" << "\n";
-	file <<"Mt->A0" << ";" << "\n";
+
+  graphvizColumnHeader();
+
+	if(counter2 -1 > 1)
+	{
+		file<<"A"<< count4 <<"-> e0[ dir = none, color = \"white\" ];" <<"\n";
+
+	}
+
+	//file <<"Mt->U0" << ";" << "\n";
+	//file <<"Mt->A0" << ";" << "\n";
 
 
 
   //int i;
-  for(i=1; i<=n-2; i++){
+/*  for(i=1; i<=n-2; i++){
   //file << "e"<<i-1<<"[ shape = point, width = 0 ];\n";
 
   file<<"{ rank = same; U"<<i<<"; e"<< i - 1<<"}" <<"\n";
 
 
- }
+}*/
 
-  file<<"A"<< m-1 <<"-> e0[ dir = none, color = \"white\" ];" <<"\n";
+  //file<<"A"<< m-1 <<"-> e0[ dir = none, color = \"white\" ];" <<"\n";
 
-  for(i=1; i<n-2; i++){
+  /*for(i=1; i<n-2; i++){
 
   file<<"e"<< i-1 <<"-> e"<< i<<"[ dir = none, color = \"white\" ];" <<"\n";
 
 
+}*/
+if(counter3 -1 > 0){
+
+for(i=0; i<counter3 - 1; i++){
+
+file<<"e"<< i<<"-> e"<< i + 1 <<"[ dir = none, color = \"white\" ];" <<"\n";
+
+
+}
 }
 
 
 	file << "}\n";
 	file.close();
 
+
+}
+
+void SM::graphvizMatrix2(){ //Crear graphviz matrix
+
+
+  int i;
+
+	int counter = 0;
+  int counter2 =0;
+  int counter3 = 0;
+	RowNode * curr = rowHead;
+	while (counter < n){
+
+		if (curr != NULL){
+
+			if (counter == curr->rowNo){
+
+
+        if(counter2 > 1){
+
+          file << "e"<<counter3<<"[ shape = point, width = 0 ];\n";
+
+          //file<<"{ rank = same; U"<<counter-1<<"; e"<< counter3<<"}" <<"\n";
+
+          counter3++;
+
+
+        }
+
+				curr = curr->nextRow;
+				cout << endl;
+        counter2++;
+			}
+			else {// No sirve de nada
+
+
+      }
+		}
+		else{
+
+
+  }
+
+		counter++;
+	}
+
+	countere = counter3 -1;
 
 }
 
@@ -1302,12 +1553,24 @@ inicial(string inicial){
 
                     //mostrarLista(lista);
 
+                    //mostrarLista(lista2);
+
+                    //mostrarLista(lista3);
+
                     while(lista != NULL){
                     eliminarLista(lista,data);
                     }
 
+                    while(lista2 != NULL){
+                    eliminarLista(lista2,data2);
+                    }
 
+                    while(lista3 != NULL){
+                    eliminarLista(lista3,data3);
+                    }
 
+										countere = 0;
+										count4 = 0;
 
 
 

@@ -15,55 +15,8 @@ e10[ shape = point, width = 0 ];
 e11[ shape = point, width = 0 ];
 e12[ shape = point, width = 0 ];
 e13[ shape = point, width = 0 ];
-A0[label ="C0" width = 1.5 style = filled, group =2];
-A0->A1;
-A1[label ="C1" width = 1.5 style = filled, group =3];
-A1->A2;
-A1->A0;
-A2[label ="C2" width = 1.5 style = filled, group =4];
-A2->A3;
-A2->A1;
-A3[label ="C3" width = 1.5 style = filled, group =5];
-A3->A4;
-A3->A2;
-A4[label ="C4" width = 1.5 style = filled, group =6];
-A4->A5;
-A4->A3;
-A5[label ="C5" width = 1.5 style = filled, group =7];
-A5->A6;
-A5->A4;
-A6[label ="C6" width = 1.5 style = filled, group =8];
-A6->A7;
-A6->A5;
-A7[label ="C7" width = 1.5 style = filled, group =9];
-A7->A8;
-A7->A6;
-A8[label ="C8" width = 1.5 style = filled, group =10];
-A8->A9;
-A8->A7;
-A9[label ="C9" width = 1.5 style = filled, group =11];
-A9->A10;
-A9->A8;
-A10[label ="C10" width = 1.5 style = filled, group =12];
-A10->A11;
-A10->A9;
-A11[label ="C11" width = 1.5 style = filled, group =13];
-A11->A12;
-A11->A10;
-A12[label ="C12" width = 1.5 style = filled, group =14];
-A12->A13;
-A12->A11;
-A13[label ="C13" width = 1.5 style = filled, group =15];
-A13->A14;
-A13->A12;
-A14[label ="C14" width = 1.5 style = filled, group =16];
-A14->A15;
-A14->A13;
-A15[label ="C15" width = 1.5 style = filled, group =17];
-A15->A14;
-{ rank = same; Mt; A0; A1; A2; A3; A4; A5; A6; A7; A8; A9; A10; A11; A12; A13; A14; A15; }
 U0[label = "R0"    width = 1.5 style = filled, group = 1 ];
-U0->U1;
+Mt->U0;
 N1_L0 [label = "0-0-0" width = 1.5, group =3];
 U0 -> N1_L0;
 A1 -> N1_L0;
@@ -81,8 +34,8 @@ N13_L0 -> N14_L0;
 A14 -> N14_L0;
 { rank = same; U0;N1_L0;N2_L0;N13_L0;N14_L0;}
 U1[label = "R1"    width = 1.5 style = filled, group = 1 ];
-U1->U2;
-U1->U0;
+U1 -> U0;
+U0 -> U1;
 N1_L1 [label = "0-0-0" width = 1.5, group =3];
 U1 -> N1_L1;
 N1_L1 -> N1_L0;
@@ -136,8 +89,9 @@ N14_L1 -> N14_L0;
 N14_L0 -> N14_L1;
 { rank = same; U1;N1_L1;N2_L1;N4_L1;N5_L1;N6_L1;N7_L1;N8_L1;N9_L1;N10_L1;N11_L1;N13_L1;N14_L1;}
 U2[label = "R2"    width = 1.5 style = filled, group = 1 ];
-U2->U3;
-U2->U1;
+U2 -> U1;
+U1 -> U2;
+{ rank = same; U1; e0}
 N1_L2 [label = "0-0-0" width = 1.5, group =3];
 U2 -> N1_L2;
 N1_L2 -> N1_L1;
@@ -207,8 +161,9 @@ N14_L2 -> N14_L1;
 N14_L1 -> N14_L2;
 { rank = same; U2;N1_L2;N2_L2;N3_L2;N4_L2;N5_L2;N6_L2;N7_L2;N8_L2;N9_L2;N10_L2;N11_L2;N12_L2;N13_L2;N14_L2;}
 U3[label = "R3"    width = 1.5 style = filled, group = 1 ];
-U3->U4;
-U3->U2;
+U3 -> U2;
+U2 -> U3;
+{ rank = same; U2; e1}
 N1_L3 [label = "0-0-0" width = 1.5, group =3];
 U3 -> N1_L3;
 N1_L3 -> N1_L2;
@@ -280,8 +235,9 @@ N14_L3 -> N14_L2;
 N14_L2 -> N14_L3;
 { rank = same; U3;N1_L3;N2_L3;N3_L3;N4_L3;N5_L3;N6_L3;N7_L3;N8_L3;N9_L3;N10_L3;N11_L3;N12_L3;N13_L3;N14_L3;}
 U4[label = "R4"    width = 1.5 style = filled, group = 1 ];
-U4->U5;
-U4->U3;
+U4 -> U3;
+U3 -> U4;
+{ rank = same; U3; e2}
 N1_L4 [label = "0-0-0" width = 1.5, group =3];
 U4 -> N1_L4;
 N1_L4 -> N1_L3;
@@ -353,8 +309,9 @@ N14_L4 -> N14_L3;
 N14_L3 -> N14_L4;
 { rank = same; U4;N1_L4;N2_L4;N3_L4;N4_L4;N5_L4;N6_L4;N7_L4;N8_L4;N9_L4;N10_L4;N11_L4;N12_L4;N13_L4;N14_L4;}
 U5[label = "R5"    width = 1.5 style = filled, group = 1 ];
-U5->U6;
-U5->U4;
+U5 -> U4;
+U4 -> U5;
+{ rank = same; U4; e3}
 N1_L5 [label = "0-0-0" width = 1.5, group =3];
 U5 -> N1_L5;
 N1_L5 -> N1_L4;
@@ -426,8 +383,9 @@ N14_L5 -> N14_L4;
 N14_L4 -> N14_L5;
 { rank = same; U5;N1_L5;N2_L5;N3_L5;N4_L5;N5_L5;N6_L5;N7_L5;N8_L5;N9_L5;N10_L5;N11_L5;N12_L5;N13_L5;N14_L5;}
 U6[label = "R6"    width = 1.5 style = filled, group = 1 ];
-U6->U7;
-U6->U5;
+U6 -> U5;
+U5 -> U6;
+{ rank = same; U5; e4}
 N1_L6 [label = "0-0-0" width = 1.5, group =3];
 U6 -> N1_L6;
 N1_L6 -> N1_L5;
@@ -499,8 +457,9 @@ N14_L6 -> N14_L5;
 N14_L5 -> N14_L6;
 { rank = same; U6;N1_L6;N2_L6;N3_L6;N4_L6;N5_L6;N6_L6;N7_L6;N8_L6;N9_L6;N10_L6;N11_L6;N12_L6;N13_L6;N14_L6;}
 U7[label = "R7"    width = 1.5 style = filled, group = 1 ];
-U7->U8;
-U7->U6;
+U7 -> U6;
+U6 -> U7;
+{ rank = same; U6; e5}
 N1_L7 [label = "0-0-0" width = 1.5, group =3];
 U7 -> N1_L7;
 N1_L7 -> N1_L6;
@@ -572,8 +531,9 @@ N14_L7 -> N14_L6;
 N14_L6 -> N14_L7;
 { rank = same; U7;N1_L7;N2_L7;N3_L7;N4_L7;N5_L7;N6_L7;N7_L7;N8_L7;N9_L7;N10_L7;N11_L7;N12_L7;N13_L7;N14_L7;}
 U8[label = "R8"    width = 1.5 style = filled, group = 1 ];
-U8->U9;
-U8->U7;
+U8 -> U7;
+U7 -> U8;
+{ rank = same; U7; e6}
 N1_L8 [label = "0-0-0" width = 1.5, group =3];
 U8 -> N1_L8;
 N1_L8 -> N1_L7;
@@ -645,8 +605,9 @@ N14_L8 -> N14_L7;
 N14_L7 -> N14_L8;
 { rank = same; U8;N1_L8;N2_L8;N3_L8;N4_L8;N5_L8;N6_L8;N7_L8;N8_L8;N9_L8;N10_L8;N11_L8;N12_L8;N13_L8;N14_L8;}
 U9[label = "R9"    width = 1.5 style = filled, group = 1 ];
-U9->U10;
-U9->U8;
+U9 -> U8;
+U8 -> U9;
+{ rank = same; U8; e7}
 N1_L9 [label = "0-0-0" width = 1.5, group =3];
 U9 -> N1_L9;
 N1_L9 -> N1_L8;
@@ -718,8 +679,9 @@ N14_L9 -> N14_L8;
 N14_L8 -> N14_L9;
 { rank = same; U9;N1_L9;N2_L9;N3_L9;N4_L9;N5_L9;N6_L9;N7_L9;N8_L9;N9_L9;N10_L9;N11_L9;N12_L9;N13_L9;N14_L9;}
 U10[label = "R10"    width = 1.5 style = filled, group = 1 ];
-U10->U11;
-U10->U9;
+U10 -> U9;
+U9 -> U10;
+{ rank = same; U9; e8}
 N1_L10 [label = "0-0-0" width = 1.5, group =3];
 U10 -> N1_L10;
 N1_L10 -> N1_L9;
@@ -791,8 +753,9 @@ N14_L10 -> N14_L9;
 N14_L9 -> N14_L10;
 { rank = same; U10;N1_L10;N2_L10;N3_L10;N4_L10;N5_L10;N6_L10;N7_L10;N8_L10;N9_L10;N10_L10;N11_L10;N12_L10;N13_L10;N14_L10;}
 U11[label = "R11"    width = 1.5 style = filled, group = 1 ];
-U11->U12;
-U11->U10;
+U11 -> U10;
+U10 -> U11;
+{ rank = same; U10; e9}
 N2_L11 [label = "0-0-0" width = 1.5, group =4];
 U11 -> N2_L11;
 N2_L11 -> N2_L10;
@@ -854,8 +817,9 @@ N13_L11 -> N13_L10;
 N13_L10 -> N13_L11;
 { rank = same; U11;N2_L11;N3_L11;N4_L11;N5_L11;N6_L11;N7_L11;N8_L11;N9_L11;N10_L11;N11_L11;N12_L11;N13_L11;}
 U12[label = "R12"    width = 1.5 style = filled, group = 1 ];
-U12->U13;
-U12->U11;
+U12 -> U11;
+U11 -> U12;
+{ rank = same; U11; e10}
 N2_L12 [label = "0-0-0" width = 1.5, group =4];
 U12 -> N2_L12;
 N2_L12 -> N2_L11;
@@ -917,8 +881,9 @@ N13_L12 -> N13_L11;
 N13_L11 -> N13_L12;
 { rank = same; U12;N2_L12;N3_L12;N4_L12;N5_L12;N6_L12;N7_L12;N8_L12;N9_L12;N10_L12;N11_L12;N12_L12;N13_L12;}
 U13[label = "R13"    width = 1.5 style = filled, group = 1 ];
-U13->U14;
-U13->U12;
+U13 -> U12;
+U12 -> U13;
+{ rank = same; U12; e11}
 N0_L13 [label = "0-0-0" width = 1.5, group =2];
 U13 -> N0_L13;
 A0 -> N0_L13;
@@ -998,8 +963,9 @@ N14_L13 -> N15_L13;
 A15 -> N15_L13;
 { rank = same; U13;N0_L13;N1_L13;N2_L13;N3_L13;N4_L13;N5_L13;N6_L13;N7_L13;N8_L13;N9_L13;N10_L13;N11_L13;N12_L13;N13_L13;N14_L13;N15_L13;}
 U14[label = "R14"    width = 1.5 style = filled, group = 1 ];
-U14->U15;
-U14->U13;
+U14 -> U13;
+U13 -> U14;
+{ rank = same; U13; e12}
 N0_L14 [label = "0-0-0" width = 1.5, group =2];
 U14 -> N0_L14;
 N0_L14 -> N0_L13;
@@ -1081,7 +1047,9 @@ N15_L14 -> N15_L13;
 N15_L13 -> N15_L14;
 { rank = same; U14;N0_L14;N1_L14;N2_L14;N3_L14;N4_L14;N5_L14;N6_L14;N7_L14;N8_L14;N9_L14;N10_L14;N11_L14;N12_L14;N13_L14;N14_L14;N15_L14;}
 U15[label = "R15"    width = 1.5 style = filled, group = 1 ];
-U15->U14;
+U15 -> U14;
+U14 -> U15;
+{ rank = same; U14; e13}
 N0_L15 [label = "0-0-0" width = 1.5, group =2];
 U15 -> N0_L15;
 N0_L15 -> N0_L14;
@@ -1178,22 +1146,54 @@ N15_L15 -> N15_L14;
 N15_L14 -> N15_L15;
 e13-> N15_L15[dir = none, color = "white"];
 { rank = same; U15;N0_L15;N1_L15;N2_L15;N3_L15;N4_L15;N5_L15;N6_L15;N7_L15;N8_L15;N9_L15;N10_L15;N11_L15;N12_L15;N13_L15;N14_L15;N15_L15;}
-Mt->U0;
+A0[label ="C0" width = 1.5 style = filled, group =2];
 Mt->A0;
-{ rank = same; U1; e0}
-{ rank = same; U2; e1}
-{ rank = same; U3; e2}
-{ rank = same; U4; e3}
-{ rank = same; U5; e4}
-{ rank = same; U6; e5}
-{ rank = same; U7; e6}
-{ rank = same; U8; e7}
-{ rank = same; U9; e8}
-{ rank = same; U10; e9}
-{ rank = same; U11; e10}
-{ rank = same; U12; e11}
-{ rank = same; U13; e12}
-{ rank = same; U14; e13}
+A1[label ="C1" width = 1.5 style = filled, group =3];
+A1->A0;
+A0->A1;
+A2[label ="C2" width = 1.5 style = filled, group =4];
+A2->A1;
+A1->A2;
+A3[label ="C3" width = 1.5 style = filled, group =5];
+A3->A2;
+A2->A3;
+A4[label ="C4" width = 1.5 style = filled, group =6];
+A4->A3;
+A3->A4;
+A5[label ="C5" width = 1.5 style = filled, group =7];
+A5->A4;
+A4->A5;
+A6[label ="C6" width = 1.5 style = filled, group =8];
+A6->A5;
+A5->A6;
+A7[label ="C7" width = 1.5 style = filled, group =9];
+A7->A6;
+A6->A7;
+A8[label ="C8" width = 1.5 style = filled, group =10];
+A8->A7;
+A7->A8;
+A9[label ="C9" width = 1.5 style = filled, group =11];
+A9->A8;
+A8->A9;
+A10[label ="C10" width = 1.5 style = filled, group =12];
+A10->A9;
+A9->A10;
+A11[label ="C11" width = 1.5 style = filled, group =13];
+A11->A10;
+A10->A11;
+A12[label ="C12" width = 1.5 style = filled, group =14];
+A12->A11;
+A11->A12;
+A13[label ="C13" width = 1.5 style = filled, group =15];
+A13->A12;
+A12->A13;
+A14[label ="C14" width = 1.5 style = filled, group =16];
+A14->A13;
+A13->A14;
+A15[label ="C15" width = 1.5 style = filled, group =17];
+A15->A14;
+A14->A15;
+{ rank = same; Mt; A0; A1; A2; A3; A4; A5; A6; A7; A8; A9; A10; A11; A12; A13; A14; A15; }
 A15-> e0[ dir = none, color = "white" ];
 e0-> e1[ dir = none, color = "white" ];
 e1-> e2[ dir = none, color = "white" ];
