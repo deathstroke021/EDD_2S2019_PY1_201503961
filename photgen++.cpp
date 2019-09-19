@@ -22,6 +22,10 @@ int count4 = 0;
 
 int counterlinf = 1;
 
+int counterlinc = 1;
+
+string color;
+
 class RGB
 {
 public:
@@ -180,6 +184,7 @@ private:
 	void graphvizCol2(int mSize, int n);
   void scssCol(int mSize, int n, int nSize);
 	void linfCol(int mSize, int n, int nSize);
+	void lincCol(int mSize,  int nSize);
 
 };
 RowNode::RowNode(int rowNo){ //Valor fila
@@ -310,7 +315,9 @@ void RowNode::graphvizCol(int mSize, int n, int nSize){ //Imprimir columna
 
 				file << "N"<< counter <<"_L"<< n << " [label = \""<< curr->value <<"\" width = 1.5, group ="<< counter + 2 <<"];"<<"\n";
 
-        if(counter2 == 0){
+        color = curr->value;
+
+				if(counter2 == 0){
           file<<"U"<<n<<" -> N"<< counter <<"_L"<< n << ";"<<"\n";
         }
 
@@ -620,6 +627,13 @@ void RowNode::linfCol(int mSize,int n, int nSize){ //Imprimir columna
 
 }
 
+void RowNode::lincCol(int mSize, int nSize){ //Imprimir columna
+
+
+
+
+}
+
 class SM{ //Clase Sparse Matrix
 private:
 	int n, m; // max number of rows and columns
@@ -633,6 +647,7 @@ private:
 	void printEmptyRow(int counter); // will print out an empty row for the counter number (ex 5| 0 0 0 0 0 0)
   void graphvizEmptyRow(int counter);
   void scssEmptyRow(int counter);
+	void lincCol();
 
 public:
 	SM(int rows, int columns);
@@ -840,6 +855,51 @@ void SM::graphvizColumnHeader(){ //Imprimir headers
 	}
 	file <<"}"<<"\n";
 
+
+
+}
+
+void SM::lincCol(){
+
+	//cout<<"Busqueda";
+
+	int count = 0;
+
+for (int i = 0; i < m; i++){
+	//cout << right << setw(5) << i;
+
+	while (count < n){
+
+	int r = count+1;
+	int co= i+1;
+	string rc;
+
+	rc =to_string(r) + "," + to_string(co);
+	//cout<<rc<<"\n";
+	//int _dato  = atoi(rc.c_str());
+
+	if(buscarLista(lista, rc) == true){
+		//cout<<"siguiente"<<"\n";
+
+
+	}
+
+	else if(buscarLista(lista, rc) == false){
+
+		file << "node"<< counterlinc <<"[label=\"("<<co - 1<<","<<r - 1<<") "<<color<< "\"];"<<"\n";
+		file<<"node"<<counterlinc -1<< "-> node"<<counterlinc<<";"<<"\n";
+		//cout<<co -1 <<" , "<<r - 1<<"\n";
+
+		counterlinc++;
+
+	}
+
+	count++;
+}
+
+	count = 0;
+	//cout<<"------------------------"<<"\n";
+}
 
 
 }
@@ -1336,38 +1396,12 @@ void SM::linealizacionccapas(string capa){ //Crear graphviz matrix
 	file<<"rankdir=LR;" <<"\n";
 	file<<"node0 [label=\" Inicio \"];" <<"\n";
 
+	lincCol();
 
-	int counter = 0;
-	int counter2 = 0;
-	RowNode * curr = rowHead;
-	while (counter2 < m)
-	{
-		while (counter < n){
-
-		if (curr != NULL){
-			if (counter == curr->rowNo){
-				curr->linfCol(m, counter, n);
-				curr = curr->nextRow;
-				cout << endl;
-			}
-			else {
-        //scssEmptyRow(counter);
-
-      }
-		}
-		else{
-      //scssEmptyRow(counter);
-
-  }
-
-		counter++;
-	}
-	counter2++;
-
-}
 
   file<<"}" <<"\n";
 	file.close();
+	counterlinc = 1;
 
 
 }
@@ -1677,10 +1711,11 @@ inicial(string inicial){
         SM * ms = new SM(h, w); // Creando sparse matrix 1
 
                     ms ->readElements("Images\\"+nombre+"\\"+dato2);
-                		ms ->printMatrix();
+                		//ms ->printMatrix();
                 		ms ->graphvizMatrix("Exports\\"+ nombre + "\\"+ token);
                     ms ->scsscapas(token);
 										ms ->linealizacionfcapas("Exports\\"+ nombre + "\\linf"+ token);
+										ms ->linealizacionccapas("Exports\\"+ nombre + "\\linc"+ token);
 
                     counterscss = 1;
 
@@ -1691,6 +1726,10 @@ inicial(string inicial){
 										string commando3 = "dot Exports\\"+ nombre + "\\linf" + token + ".dot -Tpng -o Exports\\"+ nombre + "\\linf" + token + ".png";
 
 										system(commando3.c_str());
+
+										string commando4 = "dot Exports\\"+ nombre + "\\linc" + token + ".dot -Tpng -o Exports\\"+ nombre + "\\linc" + token + ".png";
+
+										system(commando4.c_str());
 
 										//dot Matrix.dot -Tpng -o Matrix.png
 
@@ -1717,6 +1756,7 @@ inicial(string inicial){
 
 										countere = 0;
 										count4 = 0;
+										color = " ";
 
 
 
