@@ -9,44 +9,60 @@ e4[ shape = point, width = 0 ];
 e5[ shape = point, width = 0 ];
 e6[ shape = point, width = 0 ];
 e7[ shape = point, width = 0 ];
-A0[label ="C0" width = 1.5 style = filled, group =2];
-A0->A1;
-A1[label ="C1" width = 1.5 style = filled, group =3];
-A1->A2;
-A1->A0;
-A2[label ="C2" width = 1.5 style = filled, group =4];
-A2->A3;
-A2->A1;
-A3[label ="C3" width = 1.5 style = filled, group =5];
-A3->A4;
-A3->A2;
-A4[label ="C4" width = 1.5 style = filled, group =6];
-A4->A3;
-{ rank = same; Mt; A0; A1; A2; A3; A4; }
 U0[label = "R0"    width = 1.5 style = filled, group = 1 ];
-U0->U1;
+Mt->U0;
+N1_L0 [label = "255-92-92" width = 1.5, group =3];
+U0 -> N1_L0;
+A1 -> N1_L0;
+N2_L0 [label = "255-92-92" width = 1.5, group =4];
+N2_L0 -> N1_L0;
+N1_L0 -> N2_L0;
+A2 -> N2_L0;
+N3_L0 [label = "255-92-92" width = 1.5, group =5];
+N3_L0 -> N2_L0;
+N2_L0 -> N3_L0;
+A3 -> N3_L0;
+{ rank = same; U0;N1_L0;N2_L0;N3_L0;}
 U1[label = "R1"    width = 1.5 style = filled, group = 1 ];
-U1->U2;
-U1->U0;
+U1 -> U0;
+U0 -> U1;
+N1_L1 [label = "255-92-92" width = 1.5, group =3];
+U1 -> N1_L1;
+N1_L1 -> N1_L0;
+N1_L0 -> N1_L1;
+N2_L1 [label = "255-92-92" width = 1.5, group =4];
+N2_L1 -> N1_L1;
+N1_L1 -> N2_L1;
+N2_L1 -> N2_L0;
+N2_L0 -> N2_L1;
+N3_L1 [label = "255-92-92" width = 1.5, group =5];
+N3_L1 -> N2_L1;
+N2_L1 -> N3_L1;
+N3_L1 -> N3_L0;
+N3_L0 -> N3_L1;
+{ rank = same; U1;N1_L1;N2_L1;N3_L1;}
 U2[label = "R2"    width = 1.5 style = filled, group = 1 ];
-U2->U3;
-U2->U1;
+U2 -> U1;
+U1 -> U2;
+{ rank = same; U1; e0}
 N1_L2 [label = "255-92-92" width = 1.5, group =3];
 U2 -> N1_L2;
 N1_L2 -> N1_L1;
 N1_L1 -> N1_L2;
 { rank = same; U2;N1_L2;}
 U3[label = "R3"    width = 1.5 style = filled, group = 1 ];
-U3->U4;
-U3->U2;
+U3 -> U2;
+U2 -> U3;
+{ rank = same; U2; e1}
 N1_L3 [label = "255-92-92" width = 1.5, group =3];
 U3 -> N1_L3;
 N1_L3 -> N1_L2;
 N1_L2 -> N1_L3;
 { rank = same; U3;N1_L3;}
 U4[label = "R4"    width = 1.5 style = filled, group = 1 ];
-U4->U5;
-U4->U3;
+U4 -> U3;
+U3 -> U4;
+{ rank = same; U3; e2}
 N1_L4 [label = "255-92-92" width = 1.5, group =3];
 U4 -> N1_L4;
 N1_L4 -> N1_L3;
@@ -63,8 +79,9 @@ N3_L4 -> N3_L1;
 N3_L1 -> N3_L4;
 { rank = same; U4;N1_L4;N2_L4;N3_L4;}
 U5[label = "R5"    width = 1.5 style = filled, group = 1 ];
-U5->U6;
-U5->U4;
+U5 -> U4;
+U4 -> U5;
+{ rank = same; U4; e3}
 N1_L5 [label = "255-92-92" width = 1.5, group =3];
 U5 -> N1_L5;
 N1_L5 -> N1_L4;
@@ -81,48 +98,52 @@ N3_L5 -> N3_L4;
 N3_L4 -> N3_L5;
 { rank = same; U5;N1_L5;N2_L5;N3_L5;}
 U6[label = "R6"    width = 1.5 style = filled, group = 1 ];
-U6->U7;
-U6->U5;
+U6 -> U5;
+U5 -> U6;
+{ rank = same; U5; e4}
 N1_L6 [label = "255-92-92" width = 1.5, group =3];
 U6 -> N1_L6;
 N1_L6 -> N1_L5;
 N1_L5 -> N1_L6;
 { rank = same; U6;N1_L6;}
 U7[label = "R7"    width = 1.5 style = filled, group = 1 ];
-U7->U8;
-U7->U6;
+U7 -> U6;
+U6 -> U7;
+{ rank = same; U6; e5}
 N1_L7 [label = "255-92-92" width = 1.5, group =3];
 U7 -> N1_L7;
 N1_L7 -> N1_L6;
 N1_L6 -> N1_L7;
 { rank = same; U7;N1_L7;}
 U8[label = "R8"    width = 1.5 style = filled, group = 1 ];
-U8->U9;
-U8->U7;
+U8 -> U7;
+U7 -> U8;
+{ rank = same; U7; e6}
 N1_L8 [label = "255-92-92" width = 1.5, group =3];
 U8 -> N1_L8;
 N1_L8 -> N1_L7;
 N1_L7 -> N1_L8;
 { rank = same; U8;N1_L8;}
 U9[label = "R9"    width = 1.5 style = filled, group = 1 ];
-U9->U8;
+U9 -> U8;
+U8 -> U9;
+{ rank = same; U8; e7}
 N1_L9 [label = "255-92-92" width = 1.5, group =3];
 U9 -> N1_L9;
 N1_L9 -> N1_L8;
 N1_L8 -> N1_L9;
 e7-> N1_L9[dir = none, color = "white"];
 { rank = same; U9;N1_L9;}
-Mt->U0;
-Mt->A0;
-{ rank = same; U1; e0}
-{ rank = same; U2; e1}
-{ rank = same; U3; e2}
-{ rank = same; U4; e3}
-{ rank = same; U5; e4}
-{ rank = same; U6; e5}
-{ rank = same; U7; e6}
-{ rank = same; U8; e7}
-A4-> e0[ dir = none, color = "white" ];
+A1[label ="C1" width = 1.5 style = filled, group =2];
+Mt->A1;
+A2[label ="C2" width = 1.5 style = filled, group =3];
+A2->A1;
+A1->A2;
+A3[label ="C3" width = 1.5 style = filled, group =4];
+A3->A2;
+A2->A3;
+{ rank = same; Mt; A1; A2; A3; }
+A3-> e0[ dir = none, color = "white" ];
 e0-> e1[ dir = none, color = "white" ];
 e1-> e2[ dir = none, color = "white" ];
 e2-> e3[ dir = none, color = "white" ];

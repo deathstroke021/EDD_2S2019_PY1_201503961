@@ -8,6 +8,7 @@ using namespace std;
 
 ofstream file;
 ofstream filescss;
+ofstream fileslinef;
 
 string data;
 string data2;
@@ -18,6 +19,8 @@ int counterscss = 1;
 int countere = 0;
 
 int count4 = 0;
+
+int counterlinf = 1;
 
 class RGB
 {
@@ -176,6 +179,8 @@ private:
 	void graphvizCol(int mSize, int n, int nSize);
 	void graphvizCol2(int mSize, int n);
   void scssCol(int mSize, int n, int nSize);
+	void linfCol(int mSize, int n, int nSize);
+
 };
 RowNode::RowNode(int rowNo){ //Valor fila
 	this->rowNo = rowNo;
@@ -577,6 +582,44 @@ void RowNode::scssCol(int mSize,int n, int nSize){ //Imprimir columna
 
 }
 
+void RowNode::linfCol(int mSize,int n, int nSize){ //Imprimir columna
+	int counter = 0;
+
+  //int counter2 = 0;
+	ColumnNode *curr = colHead;
+
+	while (counter < mSize){
+
+		if (curr != NULL){
+			if (counter == curr->colNo){
+
+				file << "node"<< counterlinf <<"[label=\"("<<counter<<","<<n<<") "<<curr->value<< "\"];"<<"\n";
+				file<<"node"<<counterlinf -1<< "-> node"<<counterlinf<<";"<<"\n";
+
+				counterlinf++;
+
+
+				curr = curr->nextCol;
+
+			}
+			else{
+
+			}
+
+      //counter2++;
+
+
+		}
+		else{
+
+
+		}
+		counter++;
+
+	}
+
+}
+
 class SM{ //Clase Sparse Matrix
 private:
 	int n, m; // max number of rows and columns
@@ -599,6 +642,7 @@ public:
 	void graphvizMatrix(string capa);
   void scsscapas(string capa);
 	void graphvizMatrix2();
+	void linealizacionfcapas(string capa);
 	//SM * addSM(SM &other);
 };
 
@@ -1216,7 +1260,7 @@ void SM::graphvizMatrix2(){ //Crear graphviz matrix
 
 void SM::scsscapas(string capa){ //Crear graphviz matrix
 
-  file << "Colores capa"<<"\n";
+  //file << "Colores capa"<<"\n";
 
 	int counter = 0;
 	RowNode * curr = rowHead;
@@ -1244,6 +1288,45 @@ void SM::scsscapas(string capa){ //Crear graphviz matrix
 
 
 }
+
+void SM::linealizacionfcapas(string capa){ //Crear graphviz matrix
+
+	file.open("linf" + capa +".dot");
+	file<<"digraph firsGraph{" <<"\n";
+	file<<"node [shape=record];" <<"\n";
+	file<<"rankdir=LR;" <<"\n";
+	file<<"node0 [label=\" Inicio \"];" <<"\n";
+
+
+	int counter = 0;
+	RowNode * curr = rowHead;
+	while (counter < n){
+
+		if (curr != NULL){
+			if (counter == curr->rowNo){
+				curr->linfCol(m, counter, n);
+				curr = curr->nextRow;
+				cout << endl;
+			}
+			else {
+        //scssEmptyRow(counter);
+
+      }
+		}
+		else{
+      //scssEmptyRow(counter);
+
+  }
+
+		counter++;
+	}
+  file<<"}" <<"\n";
+	file.close();
+	counterlinf = 1;
+
+
+}
+
 
 void html(string nombre, int div){ //Crear graphviz matrix
 
@@ -1338,7 +1421,8 @@ inicial(string inicial){
   int pw = 0;
   int ph = 0;
 
-  ifstream ip(inicial);
+  //ifstream ip("C:\\Users\\Fernando Armira\\Downloads\\Git\\EDD_2S2019_PY1_201503961\\Images\\"+nombre+"\\"+inicial);
+	ifstream ip("Images\\"+nombre+"\\"+inicial);
 
   if(!ip.is_open()) std::cout << "ERROR: File Open" << '\n';
 
@@ -1378,7 +1462,7 @@ inicial(string inicial){
   int count3 = count2/(count - 1);
   ip.close(); // cerrando aux archivo imagen inicial
 
-  ifstream ip2(inicial);
+  ifstream ip2("Images\\"+nombre+"\\"+inicial);
 
   if(!ip2.is_open()) std::cout << "ERROR: File Open" << '\n';
 
@@ -1545,6 +1629,7 @@ inicial(string inicial){
                 		ms ->printMatrix();
                 		ms ->graphvizMatrix(token);
                     ms ->scsscapas(token);
+										ms ->linealizacionfcapas(token);
 
                     counterscss = 1;
 
