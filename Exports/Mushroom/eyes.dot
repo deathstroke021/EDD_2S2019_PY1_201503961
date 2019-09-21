@@ -1,0 +1,33 @@
+digraph Sparce_Matrix {
+node [shape=box]
+Mt[ label = "Matrix", width = 1.5, style = filled, group = 1 ];
+U11[label = "R11"    width = 1.5 style = filled, group = 1 ];
+Mt->U11;
+N6_L11 [label = "0-0-0" width = 1.5, group =8];
+U11 -> N6_L11;
+A6 -> N6_L11;
+N9_L11 [label = "0-0-0" width = 1.5, group =11];
+N9_L11 -> N6_L11;
+N6_L11 -> N9_L11;
+A9 -> N9_L11;
+{ rank = same; U11;N6_L11;N9_L11;}
+U12[label = "R12"    width = 1.5 style = filled, group = 1 ];
+U12 -> U11;
+U11 -> U12;
+N6_L12 [label = "0-0-0" width = 1.5, group =8];
+U12 -> N6_L12;
+N6_L12 -> N6_L11;
+N6_L11 -> N6_L12;
+N9_L12 [label = "0-0-0" width = 1.5, group =11];
+N9_L12 -> N6_L12;
+N6_L12 -> N9_L12;
+N9_L12 -> N9_L11;
+N9_L11 -> N9_L12;
+{ rank = same; U12;N6_L12;N9_L12;}
+A6[label ="C6" width = 1.5 style = filled, group =2];
+Mt->A6;
+A9[label ="C9" width = 1.5 style = filled, group =3];
+A9->A6;
+A6->A9;
+{ rank = same; Mt; A6; A9; }
+}

@@ -977,7 +977,7 @@ void SM::readElements(string capa){ //Ingresando elementos matriz
 		    getline(ip,dato,'\n');
 		    std::string s = dato;
 		    //std::cout << "cadena: "<<s<< '\n';
-		    std::string delimiter = ";";
+		    std::string delimiter = ",";
 
 		    size_t pos = 0;
 		    std::string token;
@@ -986,21 +986,41 @@ void SM::readElements(string capa){ //Ingresando elementos matriz
 		        token = s.substr(0, pos);
 		        //std::cout << token << std::endl;
 		        //std::cout << count2 << std::endl;
-		        count2 = count2 +1;
+		        count2++;
 		        s.erase(0, pos + delimiter.length());
 		    }
-		    count2 = count2 + 1;
+		    count2++;
 		    //std::cout << s << std::endl;
 
-		    count = count + 1;
+		    count++;
 
 		  }
 
-		  //std::cout << "Filas: "<<count - 1<< '\n';
-		  int count3 = count2/(count - 1);
-		  //std::cout << "Columnas: "<<count3<< '\n';
+			int na;
+		  int ma;
 
-			//SM *s = new SM(count - 1, count3); // Creando sparse matrix 1
+		  //std::cout<<count2<< '\n';
+
+		  if(count2 % 2 == 0){
+		      //cout<<"El numero es Par\n";
+
+		      //std::cout << "a"<< '\n';
+		      //std::cout << "Filas: "<<count<< '\n';
+		      na = count;
+		      ma = count2/na;
+		        }
+
+		   else{
+		     //cout<<"El numero es Impar\n";
+		     //std::cout << "b"<< '\n';
+
+		     //std::cout << "Filas: "<<count - 1<< '\n';
+		     na = count - 1;
+		     ma = (count2 -1)/na;
+
+		     }
+
+		     //std::cout<<ma<< '\n';
 
 		  ip.close();
 
@@ -1013,11 +1033,11 @@ void SM::readElements(string capa){ //Ingresando elementos matriz
 		  int row = 0;
 
 
-		  while(ip2.good() && row < count - 1){
+		  while(ip2.good() && row < na){
 
 		    int column = 0;
-		    while(column < count3 - 1){
-		      getline(ip2,dato2,';');
+		    while(column < ma - 1){
+		      getline(ip2,dato2,',');
 					if(dato2 != "x"){
 						insertEntry(row, column, dato2);
 					}
@@ -1032,7 +1052,7 @@ void SM::readElements(string capa){ //Ingresando elementos matriz
 				insertEntry(row, column, dato2);
 		   	}
 		    //std::cout << "Dato: "<<dato2<< '\n';
-		    //std::cout << "Column: "<< "4"<< '\n';
+		    //std::cout << "Column: "<< column<< '\n';
 		    //std::cout << "Row: "<<row << '\n';
 		    //std::cout << "-------------------" << '\n';
 		    row = row + 1;
@@ -1525,7 +1545,7 @@ inicial(string inicial){
     getline(ip,dato,'\n');
     std::string s = dato;
     //std::cout << "cadena: "<<s<< '\n';
-    std::string delimiter = ";";
+    std::string delimiter = ",";
 
     size_t pos = 0;
     std::string token;
@@ -1534,17 +1554,43 @@ inicial(string inicial){
         token = s.substr(0, pos);
         //std::cout << token << std::endl;
         //std::cout << count2 << std::endl;
-        count2 = count2 +1;
+        count2++;
         s.erase(0, pos + delimiter.length());
     }
-    count2 = count2 + 1;
+    count2++;
     //std::cout << s << std::endl;
 
-    count = count + 1;
+    count++;
 
   }
 
-  int count3 = count2/(count - 1);
+	int na;
+  int ma;
+
+  //std::cout<<count2<< '\n';
+
+  if(count2 % 2 == 0){
+      //cout<<"El numero es Par\n";
+
+      //std::cout << "a"<< '\n';
+      //std::cout << "Filas: "<<count<< '\n';
+      na = count;
+      ma = count2/na;
+        }
+
+   else{
+     //cout<<"El numero es Impar\n";
+     //std::cout << "b"<< '\n';
+
+     //std::cout << "Filas: "<<count - 1<< '\n';
+     na = count - 1;
+     ma = (count2 -1)/na;
+
+     }
+
+     //std::cout<<ma<< '\n';
+
+
   ip.close(); // cerrando aux archivo imagen inicial
 
   ifstream ip2("Images\\"+nombre+"\\"+inicial);
@@ -1554,12 +1600,13 @@ inicial(string inicial){
   string dato2;
 
   int row = 0;
+	int configuracion = 0;
 
-  while(ip2.good() && row < count - 1){
+  while(ip2.good() && row < na){
 
     int column = 0;
-    while(column < count3 - 1){
-      getline(ip2,dato2,';');
+    while(column < ma - 1){
+      getline(ip2,dato2,',');
       /*if(dato2 != "x"){
         insertEntry(row, column, dato2);
       }*/
@@ -1568,6 +1615,8 @@ inicial(string inicial){
         if (dato2 == "0"){
         std::cout << "Archivo de configuracion"<< '\n';
         std::cout << "Layer: "<<dato2<< '\n';
+
+				configuracion = row;
       }
       else{
         std::cout << "Capas imagen"<< '\n';
@@ -1587,7 +1636,8 @@ inicial(string inicial){
 
     if(row > 0){
 
-      if(dato2 == "config.csv"){
+      //if(dato2 == "config.csv"){
+			if(row == configuracion){
 
         std::cout << "Nombre: "<<dato2<< '\n';
         //std::cout << "Column: "<< column << '\n';
@@ -1605,22 +1655,53 @@ inicial(string inicial){
 
           getline(ip,dato,'\n');
           std::string s = dato;
-          std::string delimiter = ";";
+          std::string delimiter = ",";
 
           size_t pos = 0;
           std::string token;
           while ((pos = s.find(delimiter)) != std::string::npos) {
               token = s.substr(0, pos);
-              count2 = count2 +1;
+              count2++;
               s.erase(0, pos + delimiter.length());
           }
-          count2 = count2 + 1;
-          count = count + 1;
+          count2++;
+          count++;
 
         }
 
-        int count3 = count2/(count - 1);
+        //int count3 = (count2 - 1)/(count - 1);
+
+				int na;
+			  int ma;
+
+			  //std::cout<<count2<< '\n';
+
+			  if(count2 % 2 == 0){
+			      //cout<<"El numero es Par\n";
+
+			      //std::cout << "a"<< '\n';
+			      //std::cout << "Filas: "<<count<< '\n';
+			      na = count;
+			      ma = count2/na;
+			        }
+
+			   else{
+			     //cout<<"El numero es Impar\n";
+			     //std::cout << "b"<< '\n';
+
+			     //std::cout << "Filas: "<<count - 1<< '\n';
+			     na = count - 1;
+			     ma = (count2 -1)/na;
+
+			     }
+
+			     //std::cout<<ma<< '\n';
+
         ip.close();
+
+				/*std::cout << count - 1<< std::endl;
+				std::cout << count2 -1 << std::endl;
+				std::cout << count3<< std::endl;*/
 
         ifstream ip2("Images\\"+nombre+"\\"+dato2);
 
@@ -1630,11 +1711,11 @@ inicial(string inicial){
 
         int row = 0;
 
-        while(ip2.good() && row < count - 1){
+        while(ip2.good() && row < na){
 
           int column = 0;
-          while(column < count3 - 1){
-            getline(ip2,dato2,';');
+          while(column < ma - 1){
+            getline(ip2,dato2,',');
             column = column + 1;
             if(row > 0){
               if(dato2 == "image_width"){
