@@ -26,6 +26,8 @@ int counterlinc = 1;
 
 string color;
 
+string iselececcionada;
+
 class RGB
 {
 public:
@@ -92,6 +94,7 @@ Nodo *lista2 = NULL;
 
 Nodo *lista3 = NULL;
 
+Nodo *lista4 = NULL;
 
 void insertarLista(Nodo *&lista, string n){
   Nodo *nuevo_nodo = new Nodo();
@@ -123,6 +126,23 @@ void mostrarLista(Nodo *lista){
     actual = actual->siguiente;
   }
   cout<<"\n";
+}
+
+void menuLista(Nodo *lista){
+
+	/*cout << "En Orden     \n";
+	cout << "Pre Orden    \n";
+	cout << "Post Orden   \n";*/
+
+  Nodo *actual = new Nodo();
+  actual = lista;
+  int count = 1;
+  while(actual != NULL){
+    cout<<count<<". "<<actual->dato<<" \n";
+    actual = actual->siguiente;
+		count++;
+  }
+
 }
 
 bool buscarLista(Nodo *lista, string n){
@@ -415,9 +435,9 @@ void RowNode::graphvizCol(int mSize, int n, int nSize){ //Imprimir columna
 
 			 }
 
-       if(n == countere + 2){
+       /*if(n == countere + 2){
          file<<"e"<< countere <<"-> N"<<counter<<"_L"<<n<<"[dir = none, color = \"white\"];"<<"\n";
-       }
+       }*/
 
 			 //Prueba fin
 
@@ -1495,6 +1515,38 @@ void menu1()
     cout<<"\n INGRESE OPCION: ";
 }
 
+void menu2()
+{
+	cout<<"\n\t\tSELECCIONAR IMAGEN\n\n";
+     //system("cls");   // para limpiar pantalla
+     cout << endl;
+     menuLista(lista4);
+
+}
+
+void menu5()
+{
+	cout<<"\n\t\tEXPORTAR IMAGEN\n\n";
+     //system("cls");   // para limpiar pantalla
+     cout << endl;
+     cout << "1. Original     \n";
+
+}
+
+void menu6()
+{
+	cout<<"\n\t\tEXPORTAR IMAGEN\n\n";
+     //system("cls");   // para limpiar pantalla
+     cout << endl;
+     cout << "1. Images report     \n";
+		 cout << "2. Images layer      \n";
+		 cout << "3. Linear matrix     \n";
+		 cout << "4. Traversal    \n";
+		 cout << "5. Filters     \n";
+
+}
+
+
 inicial(string inicial){
 
   std::string archivo = inicial;
@@ -1519,7 +1571,7 @@ inicial(string inicial){
 
   filescss.open("Exports\\"+ nombre + "\\"+ nombre +".scss");
 
-
+	insertarLista(lista4,nombre);
 
   int w = 0;
   int h = 0;
@@ -1540,6 +1592,8 @@ inicial(string inicial){
   int count2 = 0;
   int rw, rh, rpw, rph;
 
+	int aux = 0;
+
   while(ip.good()){
 
     getline(ip,dato,'\n');
@@ -1554,6 +1608,13 @@ inicial(string inicial){
         token = s.substr(0, pos);
         //std::cout << token << std::endl;
         //std::cout << count2 << std::endl;
+				if(count > 0)
+        {
+          //std::cout << token << std::endl;
+          if(atoi(token.c_str()) > aux){
+            aux = atoi(token.c_str());
+          }
+        }
         count2++;
         s.erase(0, pos + delimiter.length());
     }
@@ -1563,6 +1624,10 @@ inicial(string inicial){
     count++;
 
   }
+
+	std::cout<<"Max: "<<aux<< '\n';
+
+  int max = aux;
 
 	int na;
   int ma;
@@ -1618,11 +1683,11 @@ inicial(string inicial){
 
 				configuracion = row;
       }
-      else{
+      /*else{
         std::cout << "Capas imagen"<< '\n';
         std::cout << "Layer: "<<dato2<< '\n';
 
-      }
+      }*/
 
       }
       //std::cout << "Column: "<<column<< '\n';
@@ -1765,90 +1830,7 @@ inicial(string inicial){
         scss(pw,ph,w,h);
 
       }
-      else{
-        std::cout << "Nombre: "<<dato2<< '\n';
 
-        /*cout<<h<<"\n";
-        cout<<w<<"\n";
-        cout<<ph<<"\n";
-        cout<<pw<<"\n";*/
-
-
-
-        std::string capa = dato2;
-        std::string delimiter = ".csv";
-
-        size_t pos = 0;
-        std::string token;
-        int count = 0;
-        while ((pos = capa.find(delimiter)) != std::string::npos) {
-            token = capa.substr(0, pos);
-            //std::cout << token << std::endl;
-            //count = count +1;
-            //std::cout << count << std::endl;
-            capa.erase(0, pos + delimiter.length());
-        }
-
-        SM * ms = new SM(h, w); // Creando sparse matrix 1
-
-                    ms ->readElements("Images\\"+nombre+"\\"+dato2);
-                		//ms ->printMatrix();
-                		ms ->graphvizMatrix("Exports\\"+ nombre + "\\"+ token);
-                    ms ->scsscapas(token);
-										ms ->linealizacionfcapas("Exports\\"+ nombre + "\\linf"+ token);
-										ms ->linealizacionccapas("Exports\\"+ nombre + "\\linc"+ token);
-
-                    counterscss = 1;
-
-										string commando2 = "dot Exports\\"+ nombre + "\\" + token + ".dot -Tpng -o Exports\\"+ nombre + "\\" + token + ".png";
-
-										system(commando2.c_str());
-
-										string commando3 = "dot Exports\\"+ nombre + "\\linf" + token + ".dot -Tpng -o Exports\\"+ nombre + "\\linf" + token + ".png";
-
-										system(commando3.c_str());
-
-										string commando4 = "dot Exports\\"+ nombre + "\\linc" + token + ".dot -Tpng -o Exports\\"+ nombre + "\\linc" + token + ".png";
-
-										system(commando4.c_str());
-
-										//dot Matrix.dot -Tpng -o Matrix.png
-
-
-                		delete ms;
-
-                    //mostrarLista(lista);
-
-                    //mostrarLista(lista2);
-
-                    //mostrarLista(lista3);
-
-                    while(lista != NULL){
-                    eliminarLista(lista,data);
-                    }
-
-                    while(lista2 != NULL){
-                    eliminarLista(lista2,data2);
-                    }
-
-                    while(lista3 != NULL){
-                    eliminarLista(lista3,data3);
-                    }
-
-										countere = 0;
-										count4 = 0;
-										color = " ";
-
-
-
-                    /*cout<<"Reporte 1"<<"\n";
-                    reportarLista(lista);
-                    eliminarElemento(lista);
-                    cout<<"Reporte 2"<<"\n";
-                    reportarLista(lista);*/
-
-
-      }
 
     }
 
@@ -1858,6 +1840,129 @@ inicial(string inicial){
 
   }
   ip2.close(); // cerrando archivo imagen inicial
+
+	for(int i = 1; i <= max; i++)
+  {
+    cout<<"Pasada: "<<i<<"\n";
+    ifstream ip2("Images\\"+nombre+"\\"+inicial);
+
+  if(!ip2.is_open()) std::cout << "ERROR: File Open" << '\n';
+
+  string dato2;
+
+  int row = 0;
+  int aux =0;
+  int aux2 =0;
+
+  while(ip2.good() && row < na ){
+
+    int column = 0;
+    while(column < ma -1){
+      getline(ip2,dato2,',');
+      if(atoi(dato2.c_str()) == i)
+      {
+      std::cout << "Dato: "<<dato2<< '\n';
+      //std::cout << "Column: "<<column<< '\n';
+      aux = row;
+      //aux2 = column;
+      column = ma;
+      }
+      column = column + 1;
+
+    }
+    getline(ip2,dato2,'\n');
+
+    if(row = aux){
+    std::cout << "Dato: "<<dato2<< '\n';
+    //std::cout << "Column: "<< aux2 + 1<< '\n';
+    //std::cout << "Row: "<<aux << '\n';
+    std::cout << "-------------------" << '\n';
+
+		std::string capa = dato2;
+	  std::string delimiter = ".csv";
+
+	  size_t pos = 0;
+	  std::string token;
+	  int count = 0;
+	  while ((pos = capa.find(delimiter)) != std::string::npos) {
+	      token = capa.substr(0, pos);
+	      //std::cout << token << std::endl;
+	      //count = count +1;
+	      //std::cout << count << std::endl;
+	      capa.erase(0, pos + delimiter.length());
+	  }
+
+		SM * ms = new SM(h, w); // Creando sparse matrix 1
+
+								ms ->readElements("Images\\"+nombre+"\\"+dato2);
+								//ms ->printMatrix();
+								ms ->graphvizMatrix("Exports\\"+ nombre + "\\"+ token);
+								ms ->scsscapas(token);
+								ms ->linealizacionfcapas("Exports\\"+ nombre + "\\linf"+ token);
+								ms ->linealizacionccapas("Exports\\"+ nombre + "\\linc"+ token);
+
+								counterscss = 1;
+
+								string commando2 = "dot Exports\\"+ nombre + "\\" + token + ".dot -Tpng -o Exports\\"+ nombre + "\\" + token + ".png";
+
+								system(commando2.c_str());
+
+								string commando3 = "dot Exports\\"+ nombre + "\\linf" + token + ".dot -Tpng -o Exports\\"+ nombre + "\\linf" + token + ".png";
+
+								system(commando3.c_str());
+
+								string commando4 = "dot Exports\\"+ nombre + "\\linc" + token + ".dot -Tpng -o Exports\\"+ nombre + "\\linc" + token + ".png";
+
+								system(commando4.c_str());
+
+								//dot Matrix.dot -Tpng -o Matrix.png
+
+
+								delete ms;
+
+								//mostrarLista(lista);
+
+								//mostrarLista(lista2);
+
+								//mostrarLista(lista3);
+
+								while(lista != NULL){
+								eliminarLista(lista,data);
+								}
+
+								while(lista2 != NULL){
+								eliminarLista(lista2,data2);
+								}
+
+								while(lista3 != NULL){
+								eliminarLista(lista3,data3);
+								}
+
+								countere = 0;
+								count4 = 0;
+								color = " ";
+
+
+
+								/*cout<<"Reporte 1"<<"\n";
+								reportarLista(lista);
+								eliminarElemento(lista);
+								cout<<"Reporte 2"<<"\n";
+								reportarLista(lista);*/
+
+
+
+
+
+
+
+    row = na;
+  }
+    row = row + 1;
+
+  }
+  ip2.close();
+}
 
 
 
@@ -1870,9 +1975,10 @@ inicial(string inicial){
 }
 
 int main(){ //Main
+	system("cls");
 
-  int op;     // opcion del menu
-  string ainicial;
+  int op,op2;     // opcion del menu
+  string ainicial, aseleccionado;
 
 
     do
@@ -1893,7 +1999,12 @@ int main(){ //Main
 
 
             case 2:
-            cout<< "\n SELECCIONAR IMAGEN: ";
+						system("cls");
+						menu2();
+						cout<< "\n Ingrese nombre de la imagen: ";
+						cin>> aseleccionado;
+						iselececcionada = aseleccionado;
+						cout<<"Imagen "<<iselececcionada <<" seleccionada";
 
                  /*cout<< "\n NUMERO A INSERTAR: "; cin>> _dato;
                  insertarFinal(lista, _dato );*/
@@ -1918,14 +2029,65 @@ int main(){ //Main
 
 
             case 5:
-            cout<< "\n EXPORTAR IMAGEN: ";
+						system("cls");
+						menu5();
+						cout<< "\n Ingrese numero de la imagen: ";
+						cin>> op2;
+
+								 switch(op2)
+								 {
+										 case 1:
+										 string commando = "Exports\\"+ aseleccionado + "\\"+ aseleccionado + ".html";
+												 system(commando.c_str());
+												 break;
+										 /*case 2:
+												 preOrden(arbol); break;
+										 case 3:
+												 postOrden(arbol); break;*/
+								 }
+            //cout<< "\n EXPORTAR IMAGEN: ";
 
                  /*cout<<"\n Valor a buscar: "; cin>> _dato;
                  buscarElemento(lista, _dato);*/
             break;
 
             case 6:
-            cout<< "\n REPORTES: ";
+						system("cls");
+						menu6();
+						cout<< "\n Ingrese numero del reporte: ";
+						cin>> op2;
+
+						switch(op2)
+						{
+								case 1:
+								string commando = "Exports\\"+ aseleccionado + "\\"+ aseleccionado + ".html";
+										system(commando.c_str());
+										break;
+								case 2:
+								string commando = "Exports\\"+ aseleccionado + "\\"+ aseleccionado + ".html";
+										system(commando.c_str());
+								break;
+								case 3:
+								string commando = "Exports\\"+ aseleccionado + "\\"+ aseleccionado + ".html";
+										system(commando.c_str());
+										break;
+								case 4:
+								string commando = "Exports\\"+ aseleccionado + "\\"+ aseleccionado + ".html";
+										system(commando.c_str());
+								break;
+								case 5:
+								string commando = "Exports\\"+ aseleccionado + "\\"+ aseleccionado + ".html";
+										system(commando.c_str());
+								break;
+
+
+								/*case 2:
+										preOrden(arbol); break;
+								case 3:
+										postOrden(arbol); break;*/
+						}
+
+            //cout<< "\n REPORTES: ";
 
                 /*cout<<"\n Valor a eliminar: "; cin>> _dato;
 

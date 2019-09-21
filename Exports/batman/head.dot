@@ -550,13 +550,11 @@ N2_L13 [label = "69-69-69" width = 1.5, group =4];
 U13 -> N2_L13;
 N2_L13 -> N2_L10;
 N2_L10 -> N2_L13;
-e11-> N2_L13[dir = none, color = "white"];
 N13_L13 [label = "69-69-69" width = 1.5, group =15];
 N13_L13 -> N2_L13;
 N2_L13 -> N13_L13;
 N13_L13 -> N13_L10;
 N13_L10 -> N13_L13;
-e11-> N13_L13[dir = none, color = "white"];
 { rank = same; U13;N2_L13;N13_L13;}
 U14[label = "R14"    width = 1.5 style = filled, group = 1 ];
 U14 -> U13;
