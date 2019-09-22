@@ -1,0 +1,6 @@
+digraph G{
+graph [ordering="out"];
+rankdir=LR
+Pikachu -> Mushroom;
+Mushroom -> batman;
+}

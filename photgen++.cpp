@@ -4,6 +4,8 @@
 #include <string>
 #include <iomanip>
 #include <map>
+#include<conio.h>
+#include <cstring>
 using namespace std;
 
 ofstream file;
@@ -27,6 +29,370 @@ int counterlinc = 1;
 string color;
 
 string iselececcionada;
+
+string iseleccionadar;
+
+string vector[30];
+int cvector = 0;
+
+string povector[30];
+int cpovector = 0;
+
+string prvector[30];
+int cprvector = 0;
+
+string invector[30];
+int cinvector = 0;
+
+
+/*-------------------------------------------------------------------------------*/
+
+//int counter3= 0;
+struct Nodo{
+  string dato;
+  Nodo *siguiente;
+};
+
+void insertarLista(Nodo *&, string);
+void mostrarLista(Nodo *);
+bool buscarLista(Nodo *, string);
+void eliminarLista(Nodo *&lista, string &n);
+
+Nodo *lista = NULL;
+
+Nodo *lista2 = NULL;
+
+Nodo *lista3 = NULL;
+
+Nodo *izar = NULL;
+Nodo *dear = NULL;
+//Nodo *lista4 = NULL;
+
+void insertarLista(Nodo *&lista, string n){
+  Nodo *nuevo_nodo = new Nodo();
+  nuevo_nodo->dato = n;
+
+  Nodo *aux1 = lista;
+  Nodo *aux2;
+
+  while((aux1 !=NULL) && (aux1->dato < n)){
+    aux2 = aux1;
+    aux1 = aux1->siguiente;
+  }
+  if(lista == aux1){
+    lista = nuevo_nodo;
+  }
+  else{
+    aux2 ->siguiente = nuevo_nodo;
+  }
+  nuevo_nodo->siguiente = aux1;
+}
+
+void mostrarLista(Nodo *lista){
+  Nodo *actual = new Nodo();
+  actual = lista;
+  cout<<"Reporte lista:"<<"\n";
+
+  while(actual != NULL){
+    cout<<actual->dato<<" -> ";
+    actual = actual->siguiente;
+  }
+  cout<<"\n";
+}
+
+/*void menuLista(Nodo *lista){
+
+	/*cout << "En Orden     \n";
+	cout << "Pre Orden    \n";
+	cout << "Post Orden   \n";
+
+  Nodo *actual = new Nodo();
+  actual = lista;
+  int count = 1;
+  while(actual != NULL){
+    cout<<count<<". "<<actual->dato<<" \n";
+    actual = actual->siguiente;
+		count++;
+  }
+
+}*/
+
+bool buscarLista(Nodo *lista, string n){
+  bool band = false;
+
+  Nodo *actual = new Nodo();
+  actual = lista;
+
+  while((actual != NULL) && (actual->dato <= n)){
+    if(actual->dato == n){
+      band = true;
+    }
+    actual = actual->siguiente;
+  }
+  if(band == true){
+    return true;
+  }
+  else{
+    return false;
+
+  }
+}
+
+void eliminarLista(Nodo *&lista, string &n){
+  Nodo *aux = lista;
+  n = aux->dato;
+  lista = aux->siguiente;
+  delete aux;
+}
+
+/*--------------------------------------------------------------------------------*/
+
+
+struct NodoT{
+  string dato; // dato entero
+  NodoT *der;
+  NodoT *izq;
+};
+
+NodoT *crearNodoT(string);
+void insertarNodoT(NodoT *&, string);
+void mostrarArbol(NodoT *, int);
+void preOrden(NodoT *arbol);
+void inOrden(NodoT *arbol);
+void postOrden(NodoT *arbol);
+void graphviza(NodoT *arbol);
+void graphvizArbol();
+void graphvizPreorden();
+void graphvizPostorden();
+void graphvizInorden();
+
+NodoT *arbol = NULL;
+
+NodoT *crearNodoT(string n){
+  NodoT *nuevo_nodo = new NodoT();
+
+  nuevo_nodo->dato = n;
+  nuevo_nodo->der = NULL;
+  nuevo_nodo->izq = NULL;
+
+  return nuevo_nodo;
+}
+
+void insertarNodoT(NodoT *&arbol, string n){
+  if(arbol == NULL){
+    NodoT *nuevo_nodo = crearNodoT(n);
+    arbol = nuevo_nodo;
+  }
+  else{
+    string valorRaiz = arbol->dato; // obtener valor valorRaiz
+    //cout<<valorRaiz<<"\n";
+    //cout<<n<<"\n";
+		string link = valorRaiz + "," + n;
+
+    char pal1[30];
+    char pal2[30];
+
+    int i;
+    for (i = 0; i < sizeof(pal1); i++) {
+        pal1[i] = tolower(valorRaiz[i]);
+        //cout << pal1[i];
+    }
+
+    //cout<<"\n";
+
+    for (i = 0; i < sizeof(pal2); i++) {
+        pal2[i] = tolower(n[i]);
+        //cout << pal2[i];
+    }
+
+    //cout<<"\n";
+
+    //cout<<strcmp(pal1, pal2)<<"\n";
+
+    if(strcmp(pal1, pal2) == 1 ){ //Si el elemnto es menor a la raiz
+      insertarNodoT(arbol->izq,n);
+			insertarLista(izar,link);
+    }
+    else if(strcmp(pal1, pal2) == -1 ){ //Si el elemento es mayor
+      insertarNodoT(arbol->der,n);
+			insertarLista(dear, link);
+    }
+  }
+}
+
+void mostrarArbol(NodoT *arbol, int cont){
+  if (arbol == NULL){
+    return;
+  }
+  else{
+    mostrarArbol(arbol->der,cont+1);
+    for(int i =0; i<cont; i++){
+      cout<<"            ";
+    }
+    cout<<arbol->dato<<endl;
+    mostrarArbol(arbol->izq,cont+1);
+  }
+}
+
+void preOrden(NodoT *arbol){
+  if(arbol == NULL){
+    return;
+  }
+  else{
+    //cout<<arbol->dato<<" - ";
+		prvector[cprvector] = arbol->dato;
+		cprvector++;
+    preOrden(arbol->izq);
+    preOrden(arbol->der);
+
+  }
+}
+
+void inOrden(NodoT *arbol){
+  if(arbol==NULL){
+    return;
+  }
+  else{
+    inOrden(arbol->izq);
+    //cout <<arbol->dato<<" - ";
+		invector[cinvector] = arbol->dato;
+		cinvector++;
+    inOrden(arbol->der);
+  }
+}
+
+void postOrden(NodoT *arbol){
+  if(arbol == NULL){
+    return;
+  }
+  else{
+    postOrden(arbol->izq);
+    postOrden(arbol->der);
+    //cout<<arbol->dato<<" - ";
+		povector[cpovector] = arbol->dato;
+		cpovector++;
+  }
+}
+
+void seleccion(NodoT *arbol){
+  if(arbol==NULL){
+    return;
+  }
+  else{
+    seleccion(arbol->izq);
+    cout <<arbol->dato<<"\n";
+    seleccion(arbol->der);
+  }
+}
+
+void graphvizArbol(){
+
+  file.open("arbol.dot");
+  file<<"digraph G{"<<"\n";
+  file<<"graph [ordering=\"out\"];"<<"\n";
+  graphviza(arbol);
+  file<<"}"<<"\n";
+  file.close();
+}
+
+void graphviza(NodoT *arbol){
+  if(arbol == NULL){
+    return;
+  }
+  else{
+    graphviza(arbol->izq);
+    graphviza(arbol->der);
+    //file<<arbol->dato<<"\n";
+		string nodo = arbol->dato;
+		string rc;
+		int count = 0;
+		int count2 = 0;
+		int count3 = 0;
+
+		for(int i =0; i<= cvector; i++)
+		{
+
+			rc= nodo +"," + vector[i];
+
+			if(buscarLista(izar, rc) == true && count == 0){
+				file<<nodo <<" -> "<< vector[i] <<";"<<"\n";
+				count++;
+			}
+
+	}
+
+	for(int i =0; i<= cvector; i++)
+	{
+
+		rc= nodo +"," + vector[i];
+
+		if(buscarLista(dear, rc) == true && count3 == 0){
+			if(count == 1){
+			file<<nodo <<" -> "<< vector[i] <<";"<<"\n";
+		}
+		else {
+			file<<"e"<<count2<<"[ shape = point, width = 0 color = \"white\" ];"<<"\n";
+			file<<nodo <<" -> e"<< count2 <<"[ dir = none, color = \"white\" ];"<<"\n";
+			file<<nodo <<" -> "<< vector[i] <<";"<<"\n";
+			count2++;
+
+		}
+		count3++;
+		}
+
+}
+
+  }
+}
+
+void graphvizPreorden(){
+
+	preOrden(arbol);
+
+  file.open("preorden.dot");
+  file<<"digraph G{"<<"\n";
+  file<<"graph [ordering=\"out\"];"<<"\n";
+	file<<"rankdir=LR"<<"\n";
+  for(int i =1; i< cprvector; i++){
+		file<<prvector[i-1] <<" -> "<< prvector[i] <<";"<<"\n";
+	}
+  file<<"}"<<"\n";
+  file.close();
+}
+
+void graphvizPostorden(){
+
+	postOrden(arbol);
+
+  file.open("postorden.dot");
+  file<<"digraph G{"<<"\n";
+  file<<"graph [ordering=\"out\"];"<<"\n";
+	file<<"rankdir=LR"<<"\n";
+  for(int i =1; i< cpovector; i++){
+		file<<povector[i-1] <<" -> "<< povector[i] <<";"<<"\n";
+	}
+  file<<"}"<<"\n";
+  file.close();
+}
+
+void graphvizInorden(){
+
+	inOrden(arbol);
+
+  file.open("inorden.dot");
+  file<<"digraph G{"<<"\n";
+  file<<"graph [ordering=\"out\"];"<<"\n";
+	file<<"rankdir=LR"<<"\n";
+  for(int i =1; i< cinvector; i++){
+		file<<invector[i-1] <<" -> "<< invector[i] <<";"<<"\n";
+	}
+  file<<"}"<<"\n";
+  file.close();
+}
+
+
+/*---------------------------------------------------------------------------------*/
+
 
 class RGB
 {
@@ -77,101 +443,7 @@ static string RGBToHexadecimal(RGB rgb) {
 	return '#' + rs + gs + bs;
 }
 
-//int counter3= 0;
-struct Nodo{
-  string dato;
-  Nodo *siguiente;
-};
-
-void insertarLista(Nodo *&, string);
-void mostrarLista(Nodo *);
-bool buscarLista(Nodo *, string);
-void eliminarLista(Nodo *&lista, string &n);
-
-Nodo *lista = NULL;
-
-Nodo *lista2 = NULL;
-
-Nodo *lista3 = NULL;
-
-Nodo *lista4 = NULL;
-
-void insertarLista(Nodo *&lista, string n){
-  Nodo *nuevo_nodo = new Nodo();
-  nuevo_nodo->dato = n;
-
-  Nodo *aux1 = lista;
-  Nodo *aux2;
-
-  while((aux1 !=NULL) && (aux1->dato < n)){
-    aux2 = aux1;
-    aux1 = aux1->siguiente;
-  }
-  if(lista == aux1){
-    lista = nuevo_nodo;
-  }
-  else{
-    aux2 ->siguiente = nuevo_nodo;
-  }
-  nuevo_nodo->siguiente = aux1;
-}
-
-void mostrarLista(Nodo *lista){
-  Nodo *actual = new Nodo();
-  actual = lista;
-  cout<<"Reporte lista:"<<"\n";
-
-  while(actual != NULL){
-    cout<<actual->dato<<" -> ";
-    actual = actual->siguiente;
-  }
-  cout<<"\n";
-}
-
-void menuLista(Nodo *lista){
-
-	/*cout << "En Orden     \n";
-	cout << "Pre Orden    \n";
-	cout << "Post Orden   \n";*/
-
-  Nodo *actual = new Nodo();
-  actual = lista;
-  int count = 1;
-  while(actual != NULL){
-    cout<<count<<". "<<actual->dato<<" \n";
-    actual = actual->siguiente;
-		count++;
-  }
-
-}
-
-bool buscarLista(Nodo *lista, string n){
-  bool band = false;
-
-  Nodo *actual = new Nodo();
-  actual = lista;
-
-  while((actual != NULL) && (actual->dato <= n)){
-    if(actual->dato == n){
-      band = true;
-    }
-    actual = actual->siguiente;
-  }
-  if(band == true){
-    return true;
-  }
-  else{
-    return false;
-
-  }
-}
-
-void eliminarLista(Nodo *&lista, string &n){
-  Nodo *aux = lista;
-  n = aux->dato;
-  lista = aux->siguiente;
-  delete aux;
-}
+/*-------------------------------------------------------------------------------*/
 
 class ColumnNode{ //Clase nodo columna
 	friend class RowNode;
@@ -1520,7 +1792,7 @@ void menu2()
 	cout<<"\n\t\tSELECCIONAR IMAGEN\n\n";
      //system("cls");   // para limpiar pantalla
      cout << endl;
-     menuLista(lista4);
+     seleccion(arbol);
 
 }
 
@@ -1543,6 +1815,36 @@ void menu6()
 		 cout << "3. Linear matrix     \n";
 		 cout << "4. Traversal    \n";
 		 cout << "5. Filters     \n";
+
+}
+
+void menu62()
+{
+	cout<<"\n\t\tIMAGES LAYER REPORT\n\n";
+     //system("cls");   // para limpiar pantalla
+     cout << endl;
+     cout << "1. Layer     \n";
+		 cout << "2. Image     \n";
+
+}
+void menu63()
+{
+	cout<<"\n\t\tLINEAR MATRIX REPORT\n\n";
+     //system("cls");   // para limpiar pantalla
+     cout << endl;
+     cout << "1. Por columnas     \n";
+		 cout << "2. Por filas     \n";
+
+}
+
+void menu64()
+{
+	cout<<"\n\t\tTRAVERSAL REPORT\n\n";
+     //system("cls");   // para limpiar pantalla
+     cout << endl;
+     cout << "1. In orden     \n";
+		 cout << "2. Post orden     \n";
+		 cout << "3. Pre orden     \n";
 
 }
 
@@ -1571,7 +1873,11 @@ inicial(string inicial){
 
   filescss.open("Exports\\"+ nombre + "\\"+ nombre +".scss");
 
-	insertarLista(lista4,nombre);
+	//insertarLista(lista4,nombre);
+	insertarNodoT(arbol,nombre);
+
+	vector[cvector] = nombre;
+	cvector++;
 
   int w = 0;
   int h = 0;
@@ -1974,11 +2280,609 @@ inicial(string inicial){
 
 }
 
+imagenreporte(string imagen){
+
+	ifstream ip("Images\\"+imagen+"\\"+imagen+".csv");
+
+  if(!ip.is_open()) std::cout << "ERROR: File Open" << '\n';
+
+  string dato;
+  /*string lastname;
+  string age;
+  string weight;
+  string a;*/
+  int count = 0;
+  int count2 = 0;
+  int aux = 0;
+
+  while(ip.good()){
+
+    getline(ip,dato,'\n');
+
+    std::string s = dato;
+    //std::cout << "cadena: "<<s<< '\n';
+    std::string delimiter = ",";
+
+    size_t pos = 0;
+    std::string token;
+    //count2 = 0;
+    while ((pos = s.find(delimiter)) != std::string::npos) {
+
+        token = s.substr(0, pos);
+        if(count > 0)
+        {
+          //std::cout << token << std::endl;
+          if(atoi(token.c_str()) > aux){
+            aux = atoi(token.c_str());
+          }
+        }
+        //std::cout << count2 << std::endl;
+        count2++;
+        s.erase(0, pos + delimiter.length());
+    }
+    count2++;
+
+
+    count++;
+
+  }
+
+  //std::cout<<"Max: "<<aux<< '\n';
+
+  int max = aux;
+  int n;
+  int m;
+
+  //std::cout<<count2<< '\n';
+
+  if(count2 % 2 == 0){
+      //cout<<"El numero es Par\n";
+
+      //std::cout << "Opcion a"<< '\n';
+      //std::cout << "Filas: "<<count<< '\n';
+      n = count;
+      m = count2/n;
+        }
+
+   else{
+     //cout<<"El numero es Impar\n";
+     //std::cout << "Opcion b"<< '\n';
+
+     //std::cout << "Filas: "<<count - 1<< '\n';
+     n = count - 1;
+     m = (count2 -1)/n;
+
+     }
+
+     //std::cout<<"Columnas: "<<m<< '\n';
+
+
+  ip.close();
+
+  for(int i = 1; i <= max; i++)
+  {
+    //cout<<"Pasada: "<<i<<"\n";
+    ifstream ip2("Images\\"+imagen+"\\"+imagen+".csv");
+
+  if(!ip2.is_open()) std::cout << "ERROR: File Open" << '\n';
+
+  string dato2;
+
+  int row = 0;
+  int aux =0;
+  int aux2 =0;
+
+  while(ip2.good() && row < n ){
+
+    int column = 0;
+    while(column < m -1){
+      getline(ip2,dato2,',');
+      if(atoi(dato2.c_str()) == i)
+      {
+      //std::cout << "Dato: "<<dato2<< '\n';
+      //std::cout << "Column: "<<column<< '\n';
+      aux = row;
+      //aux2 = column;
+      column = m;
+      }
+      column = column + 1;
+
+    }
+    getline(ip2,dato2,'\n');
+
+    if(row = aux){
+    //std::cout << "Dato: "<<dato2<< '\n';
+    //std::cout << "Column: "<< aux2 + 1<< '\n';
+    //std::cout << "Row: "<<aux << '\n';
+    //std::cout << "-------------------" << '\n';
+
+		std::string archivo = dato2;
+	  std::string delimiter = ".csv";
+
+	  size_t pos = 0;
+	  std::string nombre;
+
+	  while ((pos = archivo.find(delimiter)) != std::string::npos) {
+	      nombre = archivo.substr(0, pos);
+	      //std::cout << token << std::endl;
+	      //count = count +1;
+	      //std::cout << count << std::endl;
+	      archivo.erase(0, pos + delimiter.length());
+	  }
+
+		string commando = "Exports\\"+ imagen + "\\"+ nombre + ".png";
+		system(commando.c_str());
+
+
+    row = n;
+  }
+    row = row + 1;
+
+  }
+  ip2.close();
+}
+
+
+
+
+
+}
+
+capareporte(string imagen, int ncapa){
+
+	ifstream ip("Images\\"+imagen+"\\"+imagen+".csv");
+
+  if(!ip.is_open()) std::cout << "ERROR: File Open" << '\n';
+
+  string dato;
+  /*string lastname;
+  string age;
+  string weight;
+  string a;*/
+  int count = 0;
+  int count2 = 0;
+  int aux = 0;
+
+  while(ip.good()){
+
+    getline(ip,dato,'\n');
+
+    std::string s = dato;
+    //std::cout << "cadena: "<<s<< '\n';
+    std::string delimiter = ",";
+
+    size_t pos = 0;
+    std::string token;
+    //count2 = 0;
+    while ((pos = s.find(delimiter)) != std::string::npos) {
+
+        token = s.substr(0, pos);
+        if(count > 0)
+        {
+          //std::cout << token << std::endl;
+          if(atoi(token.c_str()) > aux){
+            aux = atoi(token.c_str());
+          }
+        }
+        //std::cout << count2 << std::endl;
+        count2++;
+        s.erase(0, pos + delimiter.length());
+    }
+    count2++;
+
+
+    count++;
+
+  }
+
+  //std::cout<<"Max: "<<aux<< '\n';
+
+  int max = aux;
+  int n;
+  int m;
+
+  //std::cout<<count2<< '\n';
+
+  if(count2 % 2 == 0){
+      //cout<<"El numero es Par\n";
+
+      //std::cout << "Opcion a"<< '\n';
+      //std::cout << "Filas: "<<count<< '\n';
+      n = count;
+      m = count2/n;
+        }
+
+   else{
+     //cout<<"El numero es Impar\n";
+     //std::cout << "Opcion b"<< '\n';
+
+     //std::cout << "Filas: "<<count - 1<< '\n';
+     n = count - 1;
+     m = (count2 -1)/n;
+
+     }
+
+     //std::cout<<"Columnas: "<<m<< '\n';
+
+
+  ip.close();
+
+  for(int i = 1; i <= max; i++)
+  {
+    //cout<<"Pasada: "<<i<<"\n";
+    ifstream ip2("Images\\"+imagen+"\\"+imagen+".csv");
+
+  if(!ip2.is_open()) std::cout << "ERROR: File Open" << '\n';
+
+  string dato2;
+
+  int row = 0;
+  int aux =0;
+  int aux2 =0;
+
+  while(ip2.good() && row < n ){
+
+    int column = 0;
+    while(column < m -1){
+      getline(ip2,dato2,',');
+      if(atoi(dato2.c_str()) == i && atoi(dato2.c_str()) == ncapa)
+      {
+      //std::cout << "Dato: "<<dato2<< '\n';
+      //std::cout << "Column: "<<column<< '\n';
+      aux = row;
+      //aux2 = column;
+      column = m;
+      }
+
+      column = column + 1;
+
+    }
+    getline(ip2,dato2,'\n');
+
+    if(row = aux){
+    //std::cout << "Dato: "<<dato2<< '\n';
+    //std::cout << "Column: "<< aux2 + 1<< '\n';
+    //std::cout << "Row: "<<aux << '\n';
+    //std::cout << "-------------------" << '\n';
+
+		std::string archivo = dato2;
+	  std::string delimiter = ".csv";
+
+	  size_t pos = 0;
+	  std::string nombre;
+
+	  while ((pos = archivo.find(delimiter)) != std::string::npos) {
+	      nombre = archivo.substr(0, pos);
+	      //std::cout << token << std::endl;
+	      //count = count +1;
+	      //std::cout << count << std::endl;
+	      archivo.erase(0, pos + delimiter.length());
+	  }
+
+		string commando = "Exports\\"+ imagen + "\\"+ nombre + ".png";
+		system(commando.c_str());
+
+
+    row = n;
+  }
+    row = row + 1;
+
+  }
+  ip2.close();
+}
+
+
+
+
+
+}
+
+lcreporte(string imagen, int ncapa){
+
+	ifstream ip("Images\\"+imagen+"\\"+imagen+".csv");
+
+  if(!ip.is_open()) std::cout << "ERROR: File Open" << '\n';
+
+  string dato;
+  /*string lastname;
+  string age;
+  string weight;
+  string a;*/
+  int count = 0;
+  int count2 = 0;
+  int aux = 0;
+
+  while(ip.good()){
+
+    getline(ip,dato,'\n');
+
+    std::string s = dato;
+    //std::cout << "cadena: "<<s<< '\n';
+    std::string delimiter = ",";
+
+    size_t pos = 0;
+    std::string token;
+    //count2 = 0;
+    while ((pos = s.find(delimiter)) != std::string::npos) {
+
+        token = s.substr(0, pos);
+        if(count > 0)
+        {
+          //std::cout << token << std::endl;
+          if(atoi(token.c_str()) > aux){
+            aux = atoi(token.c_str());
+          }
+        }
+        //std::cout << count2 << std::endl;
+        count2++;
+        s.erase(0, pos + delimiter.length());
+    }
+    count2++;
+
+
+    count++;
+
+  }
+
+  //std::cout<<"Max: "<<aux<< '\n';
+
+  int max = aux;
+  int n;
+  int m;
+
+  //std::cout<<count2<< '\n';
+
+  if(count2 % 2 == 0){
+      //cout<<"El numero es Par\n";
+
+      //std::cout << "Opcion a"<< '\n';
+      //std::cout << "Filas: "<<count<< '\n';
+      n = count;
+      m = count2/n;
+        }
+
+   else{
+     //cout<<"El numero es Impar\n";
+     //std::cout << "Opcion b"<< '\n';
+
+     //std::cout << "Filas: "<<count - 1<< '\n';
+     n = count - 1;
+     m = (count2 -1)/n;
+
+     }
+
+     //std::cout<<"Columnas: "<<m<< '\n';
+
+
+  ip.close();
+
+  for(int i = 1; i <= max; i++)
+  {
+    //cout<<"Pasada: "<<i<<"\n";
+    ifstream ip2("Images\\"+imagen+"\\"+imagen+".csv");
+
+  if(!ip2.is_open()) std::cout << "ERROR: File Open" << '\n';
+
+  string dato2;
+
+  int row = 0;
+  int aux =0;
+  int aux2 =0;
+
+  while(ip2.good() && row < n ){
+
+    int column = 0;
+    while(column < m -1){
+      getline(ip2,dato2,',');
+      if(atoi(dato2.c_str()) == i && atoi(dato2.c_str()) == ncapa)
+      {
+      //std::cout << "Dato: "<<dato2<< '\n';
+      //std::cout << "Column: "<<column<< '\n';
+      aux = row;
+      //aux2 = column;
+      column = m;
+      }
+
+      column = column + 1;
+
+    }
+    getline(ip2,dato2,'\n');
+
+    if(row = aux){
+    //std::cout << "Dato: "<<dato2<< '\n';
+    //std::cout << "Column: "<< aux2 + 1<< '\n';
+    //std::cout << "Row: "<<aux << '\n';
+    //std::cout << "-------------------" << '\n';
+
+		std::string archivo = dato2;
+	  std::string delimiter = ".csv";
+
+	  size_t pos = 0;
+	  std::string nombre;
+
+	  while ((pos = archivo.find(delimiter)) != std::string::npos) {
+	      nombre = archivo.substr(0, pos);
+	      //std::cout << token << std::endl;
+	      //count = count +1;
+	      //std::cout << count << std::endl;
+	      archivo.erase(0, pos + delimiter.length());
+	  }
+
+		string commando = "Exports\\"+ imagen + "\\linc"+ nombre + ".png";
+		system(commando.c_str());
+
+
+    row = n;
+  }
+    row = row + 1;
+
+  }
+  ip2.close();
+}
+
+
+
+
+
+}
+
+lfreporte(string imagen, int ncapa){
+
+	ifstream ip("Images\\"+imagen+"\\"+imagen+".csv");
+
+  if(!ip.is_open()) std::cout << "ERROR: File Open" << '\n';
+
+  string dato;
+  /*string lastname;
+  string age;
+  string weight;
+  string a;*/
+  int count = 0;
+  int count2 = 0;
+  int aux = 0;
+
+  while(ip.good()){
+
+    getline(ip,dato,'\n');
+
+    std::string s = dato;
+    //std::cout << "cadena: "<<s<< '\n';
+    std::string delimiter = ",";
+
+    size_t pos = 0;
+    std::string token;
+    //count2 = 0;
+    while ((pos = s.find(delimiter)) != std::string::npos) {
+
+        token = s.substr(0, pos);
+        if(count > 0)
+        {
+          //std::cout << token << std::endl;
+          if(atoi(token.c_str()) > aux){
+            aux = atoi(token.c_str());
+          }
+        }
+        //std::cout << count2 << std::endl;
+        count2++;
+        s.erase(0, pos + delimiter.length());
+    }
+    count2++;
+
+
+    count++;
+
+  }
+
+  //std::cout<<"Max: "<<aux<< '\n';
+
+  int max = aux;
+  int n;
+  int m;
+
+  //std::cout<<count2<< '\n';
+
+  if(count2 % 2 == 0){
+      //cout<<"El numero es Par\n";
+
+      //std::cout << "Opcion a"<< '\n';
+      //std::cout << "Filas: "<<count<< '\n';
+      n = count;
+      m = count2/n;
+        }
+
+   else{
+     //cout<<"El numero es Impar\n";
+     //std::cout << "Opcion b"<< '\n';
+
+     //std::cout << "Filas: "<<count - 1<< '\n';
+     n = count - 1;
+     m = (count2 -1)/n;
+
+     }
+
+     //std::cout<<"Columnas: "<<m<< '\n';
+
+
+  ip.close();
+
+  for(int i = 1; i <= max; i++)
+  {
+    //cout<<"Pasada: "<<i<<"\n";
+    ifstream ip2("Images\\"+imagen+"\\"+imagen+".csv");
+
+  if(!ip2.is_open()) std::cout << "ERROR: File Open" << '\n';
+
+  string dato2;
+
+  int row = 0;
+  int aux =0;
+  int aux2 =0;
+
+  while(ip2.good() && row < n ){
+
+    int column = 0;
+    while(column < m -1){
+      getline(ip2,dato2,',');
+      if(atoi(dato2.c_str()) == i && atoi(dato2.c_str()) == ncapa)
+      {
+      //std::cout << "Dato: "<<dato2<< '\n';
+      //std::cout << "Column: "<<column<< '\n';
+      aux = row;
+      //aux2 = column;
+      column = m;
+      }
+
+      column = column + 1;
+
+    }
+    getline(ip2,dato2,'\n');
+
+    if(row = aux){
+    //std::cout << "Dato: "<<dato2<< '\n';
+    //std::cout << "Column: "<< aux2 + 1<< '\n';
+    //std::cout << "Row: "<<aux << '\n';
+    //std::cout << "-------------------" << '\n';
+
+		std::string archivo = dato2;
+	  std::string delimiter = ".csv";
+
+	  size_t pos = 0;
+	  std::string nombre;
+
+	  while ((pos = archivo.find(delimiter)) != std::string::npos) {
+	      nombre = archivo.substr(0, pos);
+	      //std::cout << token << std::endl;
+	      //count = count +1;
+	      //std::cout << count << std::endl;
+	      archivo.erase(0, pos + delimiter.length());
+	  }
+
+		string commando = "Exports\\"+ imagen + "\\linf"+ nombre + ".png";
+		system(commando.c_str());
+
+
+    row = n;
+  }
+    row = row + 1;
+
+  }
+  ip2.close();
+}
+
+
+
+
+
+}
+
+
+
+
 int main(){ //Main
 	system("cls");
 
-  int op,op2;     // opcion del menu
-  string ainicial, aseleccionado;
+  int op,op2,capa;     // opcion del menu
+  string ainicial, aseleccionado, commando, aseleccionador;
 
 
     do
@@ -2001,7 +2905,7 @@ int main(){ //Main
             case 2:
 						system("cls");
 						menu2();
-						cout<< "\n Ingrese nombre de la imagen: ";
+						cout<< "\n Ingrese nombre de la imagen a seleccionar: ";
 						cin>> aseleccionado;
 						iselececcionada = aseleccionado;
 						cout<<"Imagen "<<iselececcionada <<" seleccionada";
@@ -2031,13 +2935,13 @@ int main(){ //Main
             case 5:
 						system("cls");
 						menu5();
-						cout<< "\n Ingrese numero de la imagen: ";
+						cout<< "\n Ingrese numero de la imagen a exportar: ";
 						cin>> op2;
 
 								 switch(op2)
 								 {
 										 case 1:
-										 string commando = "Exports\\"+ aseleccionado + "\\"+ aseleccionado + ".html";
+										 commando = "Exports\\"+ aseleccionado + "\\"+ aseleccionado + ".html";
 												 system(commando.c_str());
 												 break;
 										 /*case 2:
@@ -2054,38 +2958,151 @@ int main(){ //Main
             case 6:
 						system("cls");
 						menu6();
-						cout<< "\n Ingrese numero del reporte: ";
+						cout<< "\n Ingrese numero del reporte a visualizar: ";
 						cin>> op2;
 
 						switch(op2)
 						{
 								case 1:
-								string commando = "Exports\\"+ aseleccionado + "\\"+ aseleccionado + ".html";
-										system(commando.c_str());
+								/*mostrarLista(izar);
+								cout<<"\n";
+								mostrarLista(dear);*/
+								graphvizArbol();
+
+								commando = "dot arbol.dot -Tpng -o arbol.png";
+								system(commando.c_str());
+								commando = "arbol.png";
+								system(commando.c_str());
+								/*commando = "Exports\\"+ aseleccionado + "\\"+ aseleccionado + ".html";
+										system(commando.c_str());*/
 										break;
 								case 2:
-								string commando = "Exports\\"+ aseleccionado + "\\"+ aseleccionado + ".html";
-										system(commando.c_str());
-								break;
-								case 3:
-								string commando = "Exports\\"+ aseleccionado + "\\"+ aseleccionado + ".html";
-										system(commando.c_str());
+								system("cls");
+
+								menu2();
+								cout<< "\n Ingrese nombre de la imagen a seleccionar: ";
+								cin>> aseleccionador;
+								iseleccionadar = aseleccionador;
+								cout<<"Imagen "<<iseleccionadar<<" seleccionada";
+
+								system("cls");
+								menu62();
+								cout<< "\n Ingrese numero de una opcion: ";
+								cin>> op2;
+
+								switch(op2)
+								{
+										case 1:
+										cout<< "\n Ingrese numero de la capa a visualizar: ";
+										cin>> capa;
+										if(capa == 0){
+											cout<<"Capa no valida"<<"\n";
+										}
+										else{
+											capareporte(iseleccionadar, capa);
+										}
+
+												break;
+										case 2:
+												imagenreporte(iseleccionadar);
+												break;
+								}
+
+
 										break;
-								case 4:
-								string commando = "Exports\\"+ aseleccionado + "\\"+ aseleccionado + ".html";
-										system(commando.c_str());
-								break;
-								case 5:
-								string commando = "Exports\\"+ aseleccionado + "\\"+ aseleccionado + ".html";
-										system(commando.c_str());
-								break;
-
-
-								/*case 2:
-										preOrden(arbol); break;
 								case 3:
-										postOrden(arbol); break;*/
+
+								system("cls");
+
+								menu2();
+								cout<< "\n Ingrese nombre de la imagen a seleccionar: ";
+								cin>> aseleccionador;
+								iseleccionadar = aseleccionador;
+								cout<<"Imagen "<<iseleccionadar<<" seleccionada";
+								cout<< "\n Ingrese numero de la capa a visualizar: ";
+								cin>> capa;
+
+								if(capa == 0){
+									cout<<"Capa no valida"<<"\n";
+								}
+
+								else{
+									system("cls");
+									menu63();
+									cout<< "\n Ingrese numero de una opcion: ";
+									cin>> op2;
+
+								switch(op2)
+								{
+										case 1:
+										lcreporte(iseleccionadar,capa);
+
+												break;
+										case 2:
+										lfreporte(iseleccionadar,capa);
+
+												break;
+									}
+								}
+
+
+								case 4:
+								system("cls");
+
+								menu64();
+
+								cout<< "\n Ingrese numero de una opcion: ";
+								cin>> op2;
+
+								switch(op2)
+								{
+										case 1:
+										graphvizInorden();
+
+										commando = "dot inorden.dot -Tpng -o inorden.png";
+										system(commando.c_str());
+										commando = "inorden.png";
+										system(commando.c_str());
+
+												break;
+										case 2:
+										graphvizPostorden();
+
+										commando = "dot postorden.dot -Tpng -o postorden.png";
+										system(commando.c_str());
+										commando = "postorden.png";
+										system(commando.c_str());
+
+												break;
+
+										case 3:
+										graphvizPreorden();
+
+										commando = "dot preorden.dot -Tpng -o preorden.png";
+										system(commando.c_str());
+										commando = "preorden.png";
+										system(commando.c_str());
+
+												break;
+									}
+
+
+										//preOrden(arbol); break;
+								case 5:
+										//postOrden(arbol);
+										break;
 						}
+
+						/*int contador = 0;
+
+						mostrarArbol(arbol,contador);
+						preOrden(arbol);
+						cout<<"\n";
+						inOrden(arbol);
+						cout<<"\n";
+						postOrden(arbol);*/
+
+
 
             //cout<< "\n REPORTES: ";
 

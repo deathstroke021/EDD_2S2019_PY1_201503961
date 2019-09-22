@@ -1,0 +1,9 @@
+digraph G{
+graph [ordering="out"];
+e0[ shape = point, width = 0 color = "white" ];
+Mushroom -> e0[ dir = none, color = "white" ];
+Mushroom -> Pikachu;
+e0[ shape = point, width = 0 color = "white" ];
+batman -> e0[ dir = none, color = "white" ];
+batman -> Mushroom;
+}

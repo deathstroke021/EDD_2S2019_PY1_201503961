@@ -2,7 +2,10 @@
 #include<conio.h>
 #include<stdlib.h>
 #include <cstring>
+#include <fstream>
 using namespace std;
+
+ofstream file;
 
 struct Nodo{
   string dato; // dato entero
@@ -16,6 +19,9 @@ void mostrarArbol(Nodo *, int);
 void preOrden(Nodo *arbol);
 void inOrden(Nodo *arbol);
 void postOrden(Nodo *arbol);
+void graphviza(Nodo *arbol);
+void graphvizArbol();
+void graphvizb(Nodo *arbol, int);
 
 Nodo *arbol = NULL;
 
@@ -24,13 +30,18 @@ int main(){
   insertarNodo(arbol,"batman");
   insertarNodo(arbol,"Mushroom");
   insertarNodo(arbol,"Pikachu");
-  insertarNodo(arbol,"arbol");
+  /*insertarNodo(arbol,"Tomate");
+  insertarNodo(arbol,"Arbol");
+  insertarNodo(arbol,"Mono");
+  insertarNodo(arbol,"Casa");*/
+  //insertarNodo(arbol,"arbol");
   mostrarArbol(arbol,contador);
   preOrden(arbol);
   cout<<"\n";
   inOrden(arbol);
   cout<<"\n";
   postOrden(arbol);
+  graphvizArbol();
 
 
   return 0;
@@ -54,7 +65,7 @@ void insertarNodo(Nodo *&arbol, string n){
   else{
     string valorRaiz = arbol->dato; // obtener valor valorRaiz
     cout<<valorRaiz<<"\n";
-    //cout<<n<<"\n";
+    cout<<n<<"\n";
 
     char pal1[30];
     char pal2[30];
@@ -65,7 +76,7 @@ void insertarNodo(Nodo *&arbol, string n){
         //cout << pal1[i];
     }
 
-    cout<<"\n";
+    //cout<<"\n";
 
     for (i = 0; i < sizeof(pal2); i++) {
         pal2[i] = tolower(n[i]);
@@ -130,5 +141,43 @@ void postOrden(Nodo *arbol){
     postOrden(arbol->izq);
     postOrden(arbol->der);
     cout<<arbol->dato<<" - ";
+  }
+}
+
+void graphvizArbol(){
+  int counter = 0;
+
+  file.open("arbol.dot");
+  file<<"digraph G{"<<"\n";
+  file<<"graph [ordering=\"out\"];"<<"\n";
+  graphviza(arbol);
+  file<<"-----------";
+  graphvizb(arbol, counter);
+  file<<"}"<<"\n";
+  file.close();
+}
+
+void graphviza(Nodo *arbol){
+  if(arbol == NULL){
+    return;
+  }
+  else{
+    graphviza(arbol->izq);
+    graphviza(arbol->der);
+    file<<arbol->dato<<"\n";
+  }
+}
+
+void graphvizb(Nodo *arbol, int cont){
+  if (arbol == NULL){
+    return;
+  }
+  else{
+    graphvizb(arbol->der,cont+1);
+    /*for(int i =0; i<cont; i++){
+      file<<"            ";
+    }*/
+    file<<arbol->dato<<"\n";
+    graphvizb(arbol->izq,cont+1);
   }
 }
